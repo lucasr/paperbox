@@ -13,8 +13,16 @@ app.configure ->
     app.use express.session secret: 'paperbox'
 
     publicDir = __dirname + '/public'
+    coffeeDir = __dirname + '/coffee'
 
     app.use stylus.middleware src: publicDir
+
+    coffeeArgs =
+        src: coffeeDir
+        dest: publicDir
+        enable: ['coffeescript']
+
+    app.use express.compiler coffeeArgs
 
     app.use app.router
     app.use express.static publicDir
