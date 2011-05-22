@@ -13,13 +13,20 @@ app.configure ->
     app.use express.session secret: 'paperbox'
 
     publicDir = __dirname + '/public'
+    viewsDir = __dirname + '/views'
 
-    app.use stylus.middleware src: publicDir
+    stylusArgs =
+        src: viewsDir
+        dest: publicDir
+        compile: (str, path, fn) ->
+            stylus(str)
+            .set('filename', path)
+            .set('compress', on)
 
-    coffeeDir = __dirname + '/views'
+    app.use stylus.middleware stylusArgs
 
     coffeeArgs =
-        src: coffeeDir
+        src: viewsDir
         dest: publicDir
         enable: ['coffeescript']
 
