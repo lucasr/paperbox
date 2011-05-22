@@ -12,10 +12,12 @@ app.configure ->
     app.use express.cookieParser()
     app.use express.session secret: 'paperbox'
 
-    app.use stylus.middleware src: __dirname + '/public'
+    publicDir = __dirname + '/public'
+
+    app.use stylus.middleware src: publicDir
 
     app.use app.router
-    app.use express.static __dirname + '/public'
+    app.use express.static publicDir
 
 app.configure 'development', ->
     app.use express.errorHandler dumpExceptions: true, showStack: true
