@@ -1,0 +1,5 @@
+This file is just to ensure that the mnt directory is present on git
+repository. It will be ignored by Duostack on deployment and replaced by the
+respective cloud storage mount for the app. For more information:
+
+  http://docs.duostack.com/node/cloud-storage
