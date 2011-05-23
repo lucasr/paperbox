@@ -1,5 +1,6 @@
 express = require 'express'
 stylus = require 'stylus'
+fs = require 'fs'
 
 app = module.exports = express.createServer()
 
@@ -12,12 +13,24 @@ app.configure ->
     app.use express.cookieParser()
     app.use express.session secret: 'paperbox'
 
+    mntDir = __dirname + '/mnt'
     publicDir = __dirname + '/public'
     viewsDir = __dirname + '/views'
 
+    # This should be moved to a Duostack deploy hook once
+    # they are available to apps
+    try
+        fs.mkdirSync mntDir + '/stylesheets', 0755
+        console.log 'Created mnt directory for stylesheets'
+
+        fs.mkdirSync mntDir + '/js', 0755
+        console.log 'Created mnt directory for javascripts'
+    catch e
+        console.log 'All mnt directories are already present'
+
     stylusArgs =
         src: viewsDir
-        dest: publicDir
+        dest: mntDir
         compile: (str, path, fn) ->
             stylus(str)
             .set('filename', path)
@@ -27,13 +40,14 @@ app.configure ->
 
     coffeeArgs =
         src: viewsDir
-        dest: publicDir
+        dest: mntDir
         enable: ['coffeescript']
 
     app.use express.compiler coffeeArgs
 
     app.use app.router
     app.use express.static publicDir
+    app.use express.static mntDir
 
 app.configure 'development', ->
     app.use express.errorHandler dumpExceptions: true, showStack: true
