@@ -3,10 +3,8 @@ deps = [
     'json2'
     'underscore.min'
     'backbone.min'
+    'categories'
 ]
-
-alert 'Require'
 
 require deps, ->
     # All modules are loaded
-    alert 'Yeah'
