@@ -1,5 +1,64 @@
+$header_height = 110px
+
 body
-  padding 50px
+  padding 0px
+  margin 0px
   font 14px "Lucida Grande", Helvetica, Arial, sans-serif
-a
-  color #00B7FF
+
+h1
+  font-size 28px
+  margin 0px
+  padding 0px
+
+#chrome
+  top 0px
+  position fixed
+  width 100%
+  height $header_height
+  background-color #eee
+  border-bottom #aaa
+  z-index -1
+
+#header
+  width 1000px
+  margin 0 auto
+
+#logo
+  width 180px
+  position absolute
+  top 35px
+  left 50%
+  margin-left -500px
+
+#controls
+  width 180px
+  position absolute
+  top 35px
+  left 50%
+  margin-left 320px
+
+#leftbar
+  width 180px
+  position absolute
+  top $header_height
+  left 50%
+  margin-left -500px
+
+#rightbar
+  width 180px
+  position absolute
+  top $header_height
+  left 50%
+  margin-left 320px
+
+#content
+  background-color white
+  margin 0 auto
+  margin-top 20px
+  margin-bottom 20px
+  width 600px
+  z-index 0
+  padding 10px
+  box-shadow 3px 3px 7px #aaa
+  -moz-box-shadow 0px 0px 7px #aaa
+  -webkit-box-shadow 0px 0px 7px #aaa
