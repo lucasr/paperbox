@@ -1,64 +1,163 @@
-$header_height = 110px
+$header-height = 70px
+$title-height = 60px
+$side-bar-width = 165px
+$side-bar-width-with-padding = 180px
+$side-bar-align = -480px
+$content-width = 600px
 
-body
-  padding 0px
-  margin 0px
-  font 14px "Lucida Grande", Helvetica, Arial, sans-serif
+border-radius()
+  border-radius arguments
+  -moz-border-radius arguments
+  -webkit-border-radius arguments
 
-h1
-  font-size 28px
-  margin 0px
-  padding 0px
-
-#chrome
-  top 0px
-  position fixed
-  width 100%
-  height $header_height
-  background-color #eee
-  border-bottom #aaa
-  z-index -1
+html, body
+  font-family 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif
+  font-size 15px
+  margin 0
+  padding 0
 
 #header
-  width 1000px
+  position: fixed
+  width: 100%
+  height: $header-height
+  top: 0px
+  padding 0px
+  margin 0px
+  background-color #EEE
+  border-bottom 1px solid #DDD
+
+#header-content
+  width 960px
   margin 0 auto
+  margin-top 0px
+  height $header-height
+  overflow hidden
 
-#logo
-  width 180px
+h1#logo
   position absolute
-  top 35px
-  left 50%
-  margin-left -500px
+  margin 0px
+  padding 0px
+  margin-top 18px
+  margin-left 0px
 
-#controls
-  width 180px
+#title
+  background-color white
   position absolute
-  top 35px
-  left 50%
-  margin-left 320px
+  margin 0px
+  margin-top 10px
+  margin-left $side-bar-width-with-padding
+  padding 0px
+  width $content-width
+  height $title-height
+  box-shadow 0px 0px 4px #888
+  -moz-box-shadow 0px 0px 4px #888
+  -webkit-box-shadow 0px 0px 4px #888
 
-#leftbar
-  width 180px
-  position absolute
-  top $header_height
-  left 50%
-  margin-left -500px
+#title h1,
+#title h2
+  margin 0px
+  margin-left 20px
+  padding 0px
+  float left
 
-#rightbar
-  width 180px
-  position absolute
-  top $header_height
+h1#category-title
+  margin-top 3px
+  font-size 24px
+  clear left
+
+h2#feed-title
+  font-size 15px
+  color #555
+  font-style italic
+  clear left
+
+ul#view-selector
+  float right
+  font-size 12px
+  margin 0px
+  margin-top 8px
+  margin-right 8px
+  background-color #EEE
+  border 1px solid #BBB
+  border-radius(3px)
+
+ul#view-selector li
+  border-right 1px solid #BBB
+  padding 3px
+  padding-left 7px
+  padding-right 7px
+  float left
+  display block
+
+ul#view-selector li:last-child
+  border-right 0px
+
+ul#view-selector li.selected
+  background-color #BBB
+  font-weight bold
+
+#left
+  position fixed
   left 50%
-  margin-left 320px
+  margin-left $side-bar-align
+  padding 0px
+  top $header-height
+  width $side-bar-width
+
+#center
+  padding 0px
+  padding-left $side-bar-width-with-padding
+  padding-right $side-bar-width-with-padding
+  width $content-width
+  margin 0 auto
+  margin-top $header-height
 
 #content
-  background-color white
-  margin 0 auto
-  margin-top 20px
-  margin-bottom 20px
-  width 600px
-  z-index 0
-  padding 10px
-  box-shadow 3px 3px 7px #aaa
-  -moz-box-shadow 0px 0px 7px #aaa
-  -webkit-box-shadow 0px 0px 7px #aaa
+  padding 5px
+  padding-left 20px
+  padding-right 20px
+  min-height 400px
+  box-shadow 3px 3px 7px #888
+  -moz-box-shadow 0px 0px 7px #888
+  -webkit-box-shadow 0px 0px 7px #888
+
+#right
+  position fixed
+  right 50%
+  margin-right $side-bar-align
+  padding 0px
+  top $header-height
+  width $side-bar-width
+
+ul.clean-list
+  padding 0px
+  list-style-type none
+
+ul.side-menu
+  font-size 15px
+  margin-top 10px
+  margin-bottom 15px
+
+.content-title h1
+  font-size 22px
+  margin 0px
+  padding 0px
+  display block
+  border-bottom 2px solid #DDD
+
+.content-title a
+  font-size 12px
+  background-color #EEE
+  border 1px solid #BBB
+  border-radius(3px)
+  float right
+  text-decoration none
+  padding 3px
+  padding-left 5px
+  padding-right 5px
+  color black
+  margin-top 3px
+  margin-bottom 3px
+
+#content p
+  line-height 1.8em

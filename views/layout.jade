@@ -5,19 +5,40 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(data-main='/js/main', src='/js/require.min.js')
   body
-    #chrome
-      #header
-        #logo
-          h1 PaperBox
-        #controls
-          h1 Controls
-        #leftbar
-          h1 Categories
-        #rightbar
-          h1 Feeds
-
-    #content
-      p para1
-      p para2
-      p para3
-      p para4
+    #header
+      #header-content
+        h1#logo PaperBox
+        #title
+          ul.clean-list#view-selector
+            li Overview
+            li.selected Full
+          h1#category-title International
+          h2#feed-title Ars Technica, 35 unread entries
+    #left
+      ul#categories-menu(class='side-menu clean-list')
+        li Tech
+        li Blogs
+        li Startups
+        li Sports
+        li International
+      ul(class='side-menu clean-list')
+        li Read Later
+      ul(class='side-menu clean-list')
+        li Account
+        li Settings
+        li Logout
+    #center
+      #content
+        .content-title
+          h1 The Board 0.1.3
+          a(href='#') Read later
+        p The main feature of this release is the webcam support in photo elements with Cheese. It’s fun, it’s magic! A couple of useful key shortcuts were added: Ctrl+N to add a new page and Delete key to remove selected elements. An important crasher fix—caused by an update in gobject-introspection—is also included.
+        p I should be updating The Board’s PPA with the new release in the next days. Other distros should have updated packages soon. The sad news is that the webcam support will not be available on Natty as it doesn’t ship Cheese 3.0. Everything else should work fine.
+        p What’s next? I will be working on the implementation of a storage layer based on Tracker and a few important UI improvements. On other news, I’ll be giving a talk about The Board in the next Desktop Summit. Yay!
+    #right
+      ul(class='side-menu clean-list')
+        li All Feeds
+      ul(class='side-menu clean-list')
+        li Ars Technica
+        li OSNews
+        li Hacker News
