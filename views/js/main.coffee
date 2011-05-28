@@ -14,3 +14,5 @@ deps = [
 
 require deps, ->
     # All modules are loaded
+    $ ->
+        Global.appView = new PaperBox.AppView
