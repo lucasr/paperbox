@@ -4,6 +4,7 @@ deps = [
     'underscore.min'
     'backbone.min'
     'namespaces'
+    'app'
     'categories'
 ]
 
