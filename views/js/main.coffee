@@ -3,6 +3,7 @@ deps = [
     'json2'
     'underscore.min'
     'backbone.min'
+    'namespaces'
     'categories'
 ]
 
