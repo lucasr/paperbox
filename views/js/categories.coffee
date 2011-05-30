@@ -27,3 +27,29 @@ class PaperBox.CategoryView extends Backbone.View
     render: =>
         $(@el).text @model.get 'name'
         @
+
+class PaperBox.CategoriesView extends Backbone.View
+    el: $('#categories-menu')
+
+    initialize: ->
+        @fetchCategories()
+
+    fetchCategories: ->
+        @categories = new PaperBox.Categories
+
+        @categories.bind 'addCategory', @addCategory
+        @categories.bind 'refresh', @addAllCategories
+
+        @categories.fetch()
+
+    addCategory: (category) =>
+        view = new PaperBox.CategoryView model: category
+        $(@el).append view.render().el
+
+    addAllCategories: =>
+        # Empty the current list of categories
+        # before fetching and adding all
+        $(@el).empty()
+
+        # Append each category to the list
+        @categories.each @addCategory
