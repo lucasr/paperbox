@@ -63,9 +63,11 @@ app.configure ->
     app.use express.static mntDir
 
 app.configure 'development', ->
+    console.log 'Using development environment'
     app.use express.errorHandler dumpExceptions: true, showStack: true
 
 app.configure 'production', ->
+    console.log 'Using production environment'
     app.use express.errorHandler()
 
 app.get '/', (req, res) ->
