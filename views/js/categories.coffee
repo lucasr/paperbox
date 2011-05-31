@@ -76,6 +76,9 @@ class PaperBox.CategoriesView extends Backbone.View
         # Append each category to the list
         @categories.each @addCategory
 
+    getElementForCategory: (category) ->
+        $("li[id=category-#{category.id}]")
+
     onAddCategory: (category) =>
         @addCategory(category)
 
@@ -97,7 +100,7 @@ class PaperBox.CategoriesView extends Backbone.View
                 # We're selecting list items by id here to avoid
                 # using an extra custom jQuery plugin to do data-based
                 # selection. List item ids are set in CategoryView.
-                el = $("li[id=category-#{model.id}]")
+                el = @getElementForCategory model
 
                 newIndex = $(el).index()
 
