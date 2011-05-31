@@ -80,7 +80,7 @@ class PaperBox.CategoriesView extends Backbone.View
         $("li[id=category-#{category.id}]")
 
     onAddCategory: (category) =>
-        @addCategory(category)
+        @addCategory category
 
     onRefreshCategories: =>
         @refreshCategories()
