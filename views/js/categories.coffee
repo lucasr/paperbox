@@ -80,12 +80,17 @@ class PaperBox.CategoriesView extends Backbone.View
                 # We're selecting list items by id here to avoid
                 # using an extra custom jQuery plugin to do data-based
                 # selection. List item ids are set in CategoryView.
-                newIndex = $("li[id=category-#{model.id}]").index()
+                el = $("li[id=category-#{model.id}]")
+
+                newIndex = $(el).index()
 
                 # We use 'silent' option here to avoid
                 # broadcasting 'change' anywhere
                 model.set { 'order': newIndex },
                           { 'silent': true }
+
+                # Update element data with new index
+                $(el).data 'category-order', newIndex
 
                 model.save()
 
