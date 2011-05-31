@@ -44,7 +44,7 @@ class PaperBox.CategoriesView extends Backbone.View
     fetchCategories: ->
         @categories = new PaperBox.Categories
 
-        @categories.bind 'addCategory', @onAddCategory
+        @categories.bind 'add', @onAddCategory
         @categories.bind 'refresh', @onRefreshCategories
 
         @categories.fetch()
