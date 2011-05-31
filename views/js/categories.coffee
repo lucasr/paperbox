@@ -26,6 +26,8 @@ class PaperBox.CategoryView extends Backbone.View
 
     render: =>
         $(@el).text @model.get 'name'
+        $(@el).attr 'id', 'category-' + @model.get 'id'
+        $(@el).data 'category-order', @model.get 'order'
         @
 
 class PaperBox.CategoriesView extends Backbone.View
@@ -33,6 +35,7 @@ class PaperBox.CategoriesView extends Backbone.View
 
     initialize: ->
         @fetchCategories()
+        @makeSortable()
 
     fetchCategories: ->
         @categories = new PaperBox.Categories
@@ -41,6 +44,14 @@ class PaperBox.CategoriesView extends Backbone.View
         @categories.bind 'refresh', @addAllCategories
 
         @categories.fetch()
+
+    makeSortable: ->
+        $(@el).sortable
+            placeholder: 'side-menu-placeholder'
+            stop: @onDraggingStop
+            update: @onDraggingDone
+
+        $(@el).disableSelection()
 
     addCategory: (category) =>
         view = new PaperBox.CategoryView model: category
@@ -53,3 +64,24 @@ class PaperBox.CategoriesView extends Backbone.View
 
         # Append each category to the list
         @categories.each @addCategory
+
+    onDraggingStop: (event, ui) =>
+        newOrder = $(ui.item).index()
+        previousOrder = $(ui.item).data 'category-order'
+
+        return if newOrder is previousOrder
+
+        # Only update the set of list items that actually
+        # need changes in the order property.
+        for index in [previousOrder..newOrder]
+            do (index) =>
+                model = @categories.at index
+
+                # We're selecting list items by id here to avoid
+                # using an extra custom jQuery plugin to do data-based
+                # selection. List item ids are set in CategoryView.
+                newIndex = $("li[id=category-#{model.id}]").index()
+
+                model.set 'order': newIndex
+
+        @categories.sort silent: true
