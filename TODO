@@ -1,0 +1,2 @@
+- Prefix private methods with '_'
+- Category activation fails after dragging a category
