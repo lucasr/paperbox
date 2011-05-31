@@ -21,6 +21,9 @@ class PaperBox.Categories extends Backbone.Collection
 class PaperBox.CategoryView extends Backbone.View
     tagName: 'li'
 
+    events:
+        'click': 'onClick'
+
     initialize: ->
         @model.bind 'change', @render
 
@@ -33,6 +36,9 @@ class PaperBox.CategoryView extends Backbone.View
         # to a separate template hidden element
         $(@el).append '<div class="handle"/>'
         @
+
+    onClick: =>
+        @trigger 'activate', @model
 
 class PaperBox.CategoriesView extends Backbone.View
     el: $('#categories-menu')
