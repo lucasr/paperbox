@@ -44,6 +44,8 @@ class PaperBox.CategoriesView extends Backbone.View
     el: $('#categories-menu')
 
     initialize: ->
+        @selected = null
+
         @fetchCategories()
         @makeSortable()
 
@@ -66,6 +68,8 @@ class PaperBox.CategoriesView extends Backbone.View
 
     addCategory: (category) =>
         view = new PaperBox.CategoryView model: category
+        view.bind 'activate', @onCategoryActivate
+
         $(@el).append view.render().el
 
     refreshCategories: =>
@@ -76,8 +80,33 @@ class PaperBox.CategoriesView extends Backbone.View
         # Append each category to the list
         @categories.each @addCategory
 
+        # We automatically fetch the first category
+        # on full refresh
+        @updateSelected @categories.at 0
+
+    updateSelected: (selected) ->
+        return if selected is @selected
+
+        if @selected?
+            el = @getElementForCategory @selected
+            $(el).removeClass 'selected'
+
+        @selected = selected
+
+        if @selected?
+            el = @getElementForCategory @selected
+            $(el).addClass 'selected'
+
+        @trigger 'selected-changed'
+
+    getSelected: ->
+        @selected
+
     getElementForCategory: (category) ->
         $("li[id=category-#{category.id}]")
+
+    onCategoryActivate: (category) =>
+        @updateSelected category
 
     onAddCategory: (category) =>
         @addCategory category
