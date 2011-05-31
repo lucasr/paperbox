@@ -82,6 +82,9 @@ class PaperBox.CategoriesView extends Backbone.View
                 # selection. List item ids are set in CategoryView.
                 newIndex = $("li[id=category-#{model.id}]").index()
 
-                model.set 'order': newIndex
+                # We use 'silent' option here to avoid
+                # broadcasting 'change' anywhere
+                model.set { 'order': newIndex },
+                          { 'silent': true }
 
         @categories.sort silent: true
