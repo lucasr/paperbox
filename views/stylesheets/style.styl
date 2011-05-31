@@ -145,6 +145,25 @@ ul.side-menu li
 ul.side-menu li.side-menu-placeholder
   background-color #EEE
 
+ul.side-menu li .handle
+  width 6px
+  height 100%
+  background none
+  margin-right 5px
+  float left
+  cursor auto
+
+ul.side-menu li:hover .handle
+  background-image url('/images/grip.png')
+  background-repeat no-repeat
+  background-position left 3px
+
+ul.side-menu li:hover .handle:hover
+  cursor move
+
+ul#categories-menu
+  margin-left -11px
+
 .content-title h1
   font-size 22px
   margin 0px

@@ -28,6 +28,10 @@ class PaperBox.CategoryView extends Backbone.View
         $(@el).text @model.get 'name'
         $(@el).attr 'id', 'category-' + @model.get 'id'
         $(@el).data 'category-order', @model.get 'order'
+
+        # FIXME: Should move the construction of CategoryView
+        # to a separate template hidden element
+        $(@el).append '<div class="handle"/>'
         @
 
 class PaperBox.CategoriesView extends Backbone.View
@@ -48,6 +52,7 @@ class PaperBox.CategoriesView extends Backbone.View
     makeSortable: ->
         $(@el).sortable
             placeholder: 'side-menu-placeholder'
+            handle: '.handle'
             stop: @onDraggingStop
             update: @onDraggingDone
 
