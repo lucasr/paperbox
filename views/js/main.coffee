@@ -9,6 +9,7 @@ deps = [
     'require.order.min!backbone.min'
     'require.order.min!namespaces'
     'require.order.min!categories'
+    'require.order.min!feeds'
     'require.order.min!app'
 ]
 
