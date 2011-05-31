@@ -87,4 +87,6 @@ class PaperBox.CategoriesView extends Backbone.View
                 model.set { 'order': newIndex },
                           { 'silent': true }
 
+                model.save()
+
         @categories.sort silent: true
