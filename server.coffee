@@ -5,16 +5,16 @@ fs = require 'fs'
 app = module.exports = express.createServer()
 
 CATEGORIES = [
-    { id: 0, name: 'Cat 0', order: 0 }
-    { id: 1, name: 'Cat 1', order: 1 }
-    { id: 2, name: 'Cat 2', order: 2 }
-    { id: 3, name: 'Cat 3', order: 3 }
-    { id: 4, name: 'Cat 4', order: 4 }
-    { id: 5, name: 'Cat 5', order: 5 }
-    { id: 6, name: 'Cat 6', order: 6 }
-    { id: 7, name: 'Cat 7', order: 7 }
-    { id: 8, name: 'Cat 8', order: 8 }
-    { id: 9, name: 'Cat 9', order: 9 }
+    { id: 1, name: 'Cat 0', order: 0 }
+    { id: 2, name: 'Cat 1', order: 1 }
+    { id: 3, name: 'Cat 2', order: 2 }
+    { id: 4, name: 'Cat 3', order: 3 }
+    { id: 5, name: 'Cat 4', order: 4 }
+    { id: 6, name: 'Cat 5', order: 5 }
+    { id: 7, name: 'Cat 6', order: 6 }
+    { id: 8, name: 'Cat 7', order: 7 }
+    { id: 9, name: 'Cat 8', order: 8 }
+    { id: 10, name: 'Cat 9', order: 9 }
 ]
 
 app.configure ->
