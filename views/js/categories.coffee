@@ -40,8 +40,8 @@ class PaperBox.CategoriesView extends Backbone.View
     fetchCategories: ->
         @categories = new PaperBox.Categories
 
-        @categories.bind 'addCategory', @addCategory
-        @categories.bind 'refresh', @addAllCategories
+        @categories.bind 'addCategory', @onAddCategory
+        @categories.bind 'refresh', @onRefreshCategories
 
         @categories.fetch()
 
@@ -57,13 +57,19 @@ class PaperBox.CategoriesView extends Backbone.View
         view = new PaperBox.CategoryView model: category
         $(@el).append view.render().el
 
-    addAllCategories: =>
+    refreshCategories: =>
         # Empty the current list of categories
         # before fetching and adding all
         $(@el).empty()
 
         # Append each category to the list
         @categories.each @addCategory
+
+    onAddCategory: (category) =>
+        @addCategory(category)
+
+    onRefreshCategories: =>
+        @refreshCategories()
 
     onDraggingStop: (event, ui) =>
         newOrder = $(ui.item).index()
