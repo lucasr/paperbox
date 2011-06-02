@@ -77,8 +77,16 @@ class PaperBox.FeedsView extends Backbone.View
         # before fetching and adding all
         $(@el).empty()
 
-        # Append each feed to the list
-        @feeds.each @addFeed
+        docFragment = document.createDocumentFragment()
+
+        # Append each feed to a document
+        # docFragmentment instead of adding each one directly
+        # to the document, for better performance
+        @feeds.each (feed) =>
+            view = @createFeedView feed
+            docFragment.appendChild view.render().el
+
+        $(@el).append docFragment
 
     setCategory: (category) ->
         return if category is @category
