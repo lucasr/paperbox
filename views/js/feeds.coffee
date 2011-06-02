@@ -65,8 +65,11 @@ class PaperBox.FeedsView extends Backbone.View
 
         $(@el).disableSelection()
 
+    createFeedView: (feed) ->
+        new PaperBox.FeedView model: feed
+
     addFeed: (feed) =>
-        view = new PaperBox.FeedView model: feed
+        view = @createFeedView feed
         $(@el).append view.render().el
 
     refreshFeeds: =>
