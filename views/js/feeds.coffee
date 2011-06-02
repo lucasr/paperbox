@@ -29,6 +29,9 @@ class PaperBox.Feeds extends Backbone.Collection
 class PaperBox.FeedView extends Backbone.View
     tagName: 'li'
 
+    events:
+        'click': 'onClick'
+
     initialize: ->
         @model.bind 'change', @render
 
@@ -36,6 +39,9 @@ class PaperBox.FeedView extends Backbone.View
         $(@el).text @model.get 'name'
         $(@el).attr 'id', 'feed-' + @model.get 'id'
         @
+
+    onClick: =>
+        @trigger 'activate', @model
 
 
 class PaperBox.FeedsView extends Backbone.View
