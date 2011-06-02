@@ -49,6 +49,7 @@ class PaperBox.FeedsView extends Backbone.View
 
     initialize: ->
         @category = null
+        @selected = null
 
     fetchFeeds: ->
         return if not @category?
@@ -72,7 +73,10 @@ class PaperBox.FeedsView extends Backbone.View
         $(@el).disableSelection()
 
     createFeedView: (feed) ->
-        new PaperBox.FeedView model: feed
+        view = new PaperBox.FeedView model: feed
+        view.bind 'activate', @onFeedActivate
+
+        view
 
     addFeed: (feed) =>
         view = @createFeedView feed
@@ -94,11 +98,39 @@ class PaperBox.FeedsView extends Backbone.View
 
         $(@el).append docFragment
 
+        # We automatically fetch the first category
+        # on full refresh
+        @updateSelected @feeds.at 0
+
+    updateSelected: (selected) ->
+        return if selected is @selected
+
+        if @selected?
+            el = @getElementForFeed @selected
+            $(el).removeClass 'selected'
+
+        @selected = selected
+
+        if @selected?
+            el = @getElementForFeed @selected
+            $(el).addClass 'selected'
+
+        @trigger 'selected-changed'
+
+    getSelected: ->
+        @selected
+
     setCategory: (category) ->
         return if category is @category
 
         @category = category
         @fetchFeeds()
+
+    getElementForFeed: (feed) ->
+        $("li[id=feed-#{feed.id}]")
+
+    onFeedActivate: (feed) =>
+        @updateSelected feed
 
     onAddFeed: (feed) =>
         @addFeed(feed)
