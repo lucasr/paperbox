@@ -91,7 +91,28 @@ loadCategory = (req, res, next, categoryId) ->
 
     next()
 
+loadFeed = (req, res, next, feedId) ->
+    # The feedId might be undefined when using
+    # the /categories/:categoryId/feeds with no feed
+    # id. Don't do anything in this case.
+    return next() if feedId is undefined
+
+    id = parseInt feedId, 10
+
+    # Given that the feeds routes depend on categoryId
+    # we should have a category set on request when we
+    # reach this point.
+    found = req.category.feeds.filter (f) -> id is f.id
+
+    if found.length isnt 1
+        return next(new Error('Unable to find feed'))
+
+    req.feed = found[0]
+
+    next()
+
 app.param 'categoryId', loadCategory
+app.param 'feedId', loadFeed
 
 app.get '/api/categories/:categoryId?', (req, res) ->
     if 'category' of req
@@ -99,8 +120,11 @@ app.get '/api/categories/:categoryId?', (req, res) ->
     else
         res.send CATEGORIES
 
-app.get '/api/categories/:categoryId/feeds', (req, res) ->
-    res.send req.category.feeds
+app.get '/api/categories/:categoryId/feeds/:feedId?', (req, res) ->
+    if 'feed' of req
+        res.send req.feed
+    else
+        res.send req.category.feeds
 
 app.put '/api/categories/:categoryId', (req, res) ->
     req.category.name = req.body.name
