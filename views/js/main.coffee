@@ -2,9 +2,9 @@
 # the order they appear in the deps list. The order is only
 # important for interdependent scripts.
 deps = [
-    'jquery.min'
-    'jquery-ui.custom.min'
-    'json2'
+    'require.order.min!jquery.min'
+    'require.order.min!jquery-ui.custom.min'
+    'require.order.min!json2'
     'require.order.min!underscore.min'
     'require.order.min!backbone.min'
     'require.order.min!namespaces'
