@@ -81,8 +81,16 @@ class PaperBox.CategoriesView extends Backbone.View
         # before fetching and adding all
         $(@el).empty()
 
-        # Append each category to the list
-        @categories.each @addCategory
+        docFragment = document.createDocumentFragment()
+
+        # Append each category to a document
+        # docFragmentment instead of adding each one directly
+        # to the document, for better performance
+        @categories.each (category) =>
+            view = @createCategoryView category
+            docFragment.appendChild view.render().el
+
+        $(@el).append docFragment
 
         # We automatically fetch the first category
         # on full refresh
