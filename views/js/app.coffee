@@ -10,11 +10,11 @@ class PaperBox.AppView extends Backbone.View
     createFeedsView: ->
         @feedsView = new PaperBox.FeedsView
 
-    updateHeader: (category) ->
+    updateHeaderForCategory: (category) ->
         $('#category-title').text category.get 'name'
 
     onCategoryChanged: =>
         category = @categoriesView.getSelected()
 
-        @updateHeader category
+        @updateHeaderForCategory category
         @feedsView.setCategory category
