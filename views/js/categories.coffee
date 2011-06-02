@@ -66,10 +66,14 @@ class PaperBox.CategoriesView extends Backbone.View
 
         $(@el).disableSelection()
 
-    addCategory: (category) =>
+    createCategoryView: (category) ->
         view = new PaperBox.CategoryView model: category
         view.bind 'activate', @onCategoryActivate
 
+        view
+
+    addCategory: (category) =>
+        view = @createCategoryView category
         $(@el).append view.render().el
 
     refreshCategories: =>
