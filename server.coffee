@@ -130,5 +130,8 @@ app.put '/api/categories/:categoryId', (req, res) ->
     req.category.name = req.body.name
     req.category.order = req.body.order
 
+app.put '/api/categories/:categoryId/feeds/:feedId', (req, res) ->
+    req.feed.name = req.body.name
+
 app.listen(3000)
 console.log "PaperBox on port %d", app.address().port
