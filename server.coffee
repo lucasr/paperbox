@@ -27,12 +27,12 @@ for c in CATEGORIES
             name: "Cat #{c.id}, Feed #{j}"
 
     for f in c.feeds
-        f.posts = []
+        f.entries = []
 
         for i in [1...11]
-            f.posts.push
+            f.entries.push
                 id: i
-                title: "Feed #{f.id}, Post #{i}"
+                title: "Feed #{f.id}, Entry #{i}"
                 content: '<p>Par 1</p><p>Par 2</p><p>Par 3</p>'
 
 app.configure ->
@@ -129,8 +129,29 @@ loadFeed = (req, res, next, feedId) ->
 
     next()
 
+loadEntry = (req, res, next, entryId) ->
+    # The entryId might be undefined when using
+    # the /categories/:categoryId/feeds/:feedId/entries
+    # with no entry id. Don't do anything in this case.
+    return next() if entryId is undefined
+
+    id = parseInt entryId, 10
+
+    # Given that the entries routes depend on feedId
+    # we should have a feed set on request when we
+    # reach this point.
+    found = req.feed.entries.filter (p) -> id is p.id
+
+    if found.length isnt 1
+        return next(new Error('Unable to find entry'))
+
+    req.entry = found[0]
+
+    next()
+
 app.param 'categoryId', loadCategory
 app.param 'feedId', loadFeed
+app.param 'entryId', loadEntry
 
 app.get '/api/categories/:categoryId?', (req, res) ->
     if 'category' of req
@@ -143,6 +164,12 @@ app.get '/api/categories/:categoryId/feeds/:feedId?', (req, res) ->
         res.send req.feed
     else
         res.send req.category.feeds
+
+app.get '/api/categories/:categoryId/feeds/:feedId/entries/:entryId?', (req, res) ->
+    if 'entry' of req
+        res.send req.entry
+    else
+        res.send req.feed.entries
 
 app.put '/api/categories/:categoryId', (req, res) ->
     req.category.name = req.body.name
