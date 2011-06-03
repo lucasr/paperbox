@@ -5,17 +5,35 @@ fs = require 'fs'
 app = module.exports = express.createServer()
 
 CATEGORIES = [
-    { id: 1,  name: 'Cat 1',  order: 0, feeds: [{ id: 1, name: 'Cat 1, Feed 1' }, { id: 2, name: 'Cat 1, Feed 2' }] }
-    { id: 2,  name: 'Cat 2',  order: 1, feeds: [{ id: 1, name: 'Cat 2, Feed 1' }, { id: 2, name: 'Cat 2, Feed 2' }] }
-    { id: 3,  name: 'Cat 3',  order: 2, feeds: [{ id: 1, name: 'Cat 3, Feed 1' }, { id: 2, name: 'Cat 3, Feed 2' }] }
-    { id: 4,  name: 'Cat 4',  order: 3, feeds: [{ id: 1, name: 'Cat 4, Feed 1' }, { id: 2, name: 'Cat 4, Feed 2' }] }
-    { id: 5,  name: 'Cat 5',  order: 4, feeds: [{ id: 1, name: 'Cat 5, Feed 1' }, { id: 2, name: 'Cat 5, Feed 2' }] }
-    { id: 6,  name: 'Cat 6',  order: 5, feeds: [{ id: 1, name: 'Cat 6, Feed 1' }, { id: 2, name: 'Cat 6, Feed 2' }] }
-    { id: 7,  name: 'Cat 7',  order: 6, feeds: [{ id: 1, name: 'Cat 7, Feed 1' }, { id: 2, name: 'Cat 7, Feed 2' }] }
-    { id: 8,  name: 'Cat 8',  order: 7, feeds: [{ id: 1, name: 'Cat 8, Feed 1' }, { id: 2, name: 'Cat 8, Feed 2' }] }
-    { id: 9,  name: 'Cat 9',  order: 8, feeds: [{ id: 1, name: 'Cat 9, Feed 1' }, { id: 2, name: 'Cat 9, Feed 2' }] }
-    { id: 10, name: 'Cat 10', order: 9, feeds: [{ id: 1, name: 'Cat 10, Feed 1' }, { id: 2, name: 'Cat 10, Feed 2' }] }
+    { id: 1,  name: 'Cat 1',  order: 0 }
+    { id: 2,  name: 'Cat 2',  order: 1 }
+    { id: 3,  name: 'Cat 3',  order: 2 }
+    { id: 4,  name: 'Cat 4',  order: 3 }
+    { id: 5,  name: 'Cat 5',  order: 4 }
+    { id: 6,  name: 'Cat 6',  order: 5 }
+    { id: 7,  name: 'Cat 7',  order: 6 }
+    { id: 8,  name: 'Cat 8',  order: 7 }
+    { id: 9,  name: 'Cat 9',  order: 8 }
+    { id: 10, name: 'Cat 10', order: 9 }
 ]
+
+POSTS = {}
+for c in CATEGORIES
+    c.feeds = []
+
+    for j in [1...8]
+        c.feeds.push
+            id: j
+            name: "Cat #{c.id}, Feed #{j}"
+
+    for f in c.feeds
+        f.posts = []
+
+        for i in [1...11]
+            f.posts.push
+                id: i
+                title: "Feed #{f.id}, Post #{i}"
+                content: '<p>Par 1</p><p>Par 2</p><p>Par 3</p>'
 
 app.configure ->
     app.set 'views', __dirname + '/views'
