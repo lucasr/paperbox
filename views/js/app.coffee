@@ -2,6 +2,7 @@ class PaperBox.AppView extends Backbone.View
     initialize: ->
         @createCategoriesView()
         @createFeedsView()
+        @createEntriesView()
 
     createCategoriesView: ->
         @categoriesView = new PaperBox.CategoriesView
@@ -10,6 +11,9 @@ class PaperBox.AppView extends Backbone.View
     createFeedsView: ->
         @feedsView = new PaperBox.FeedsView
         @feedsView.bind 'selected-changed', @onFeedChanged
+
+    createEntriesView: ->
+        @entriesView = new PaperBox.EntriesView
 
     updateHeaderForCategory: (category) ->
         $('#category-title').text category.get 'name'
@@ -24,5 +28,8 @@ class PaperBox.AppView extends Backbone.View
         @feedsView.setCategory category
 
     onFeedChanged: =>
+        category = @categoriesView.getSelected()
         feed = @feedsView.getSelected()
+
         @updateHeaderForFeed feed
+        @entriesView.setCategoryAndFeed category, feed

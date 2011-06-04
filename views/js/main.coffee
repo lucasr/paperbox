@@ -10,6 +10,7 @@ deps = [
     'require.order.min!namespaces'
     'require.order.min!categories'
     'require.order.min!feeds'
+    'require.order.min!entries'
     'require.order.min!app'
 ]
 
