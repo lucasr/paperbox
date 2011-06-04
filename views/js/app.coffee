@@ -21,6 +21,9 @@ class PaperBox.AppView extends Backbone.View
     updateHeaderForFeed: (feed) ->
         $('#feed-title').text feed.get 'name'
 
+    updateScroll: ->
+        $('html, body').scrollTop(0)
+
     onCategoryChanged: =>
         category = @categoriesView.getSelected()
 
@@ -31,5 +34,6 @@ class PaperBox.AppView extends Backbone.View
         category = @categoriesView.getSelected()
         feed = @feedsView.getSelected()
 
+        @updateScroll()
         @updateHeaderForFeed feed
         @entriesView.setCategoryAndFeed category, feed
