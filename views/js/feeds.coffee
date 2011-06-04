@@ -49,14 +49,6 @@ class PaperBox.FeedsView extends Backbone.View
     @category = null
     @selected = null
 
-  makeSortable: ->
-    $(@el).sortable
-      placeholder: 'side-menu-placeholder'
-      stop: @onDraggingStop
-      update: @onDraggingDone
-
-    $(@el).disableSelection()
-
   createFeedView: (feed) ->
     view = new PaperBox.FeedView model: feed
     view.bind 'activate', @onFeedActivate
