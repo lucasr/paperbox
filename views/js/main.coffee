@@ -8,8 +8,8 @@ deps = [
   'require.order.min!underscore.min'
   'require.order.min!backbone.min'
   'require.order.min!namespaces'
-  'require.order.min!categories'
   'require.order.min!feeds'
+  'require.order.min!categories'
   'require.order.min!entries'
   'require.order.min!app'
 ]
