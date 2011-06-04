@@ -1,139 +1,139 @@
 class PaperBox.Feed extends Backbone.Model
-    UNTITLED: 'Untitled'
+  UNTITLED: 'Untitled'
 
-    initialize: ->
-        @set 'name', @UNTITLED if @get("content")?
+  initialize: ->
+    @set 'name', @UNTITLED if @get("content")?
 
 
 class PaperBox.Feeds extends Backbone.Collection
-    model: PaperBox.Feed
+  model: PaperBox.Feed
 
-    initialize: (models, options) ->
-        if 'category' of options
-            @setCategory options.category
+  initialize: (models, options) ->
+    if 'category' of options
+      @setCategory options.category
 
-    url: ->
-        null if not @category?
-        "/api/categories/#{@category.id}/feeds"
+  url: ->
+    null if not @category?
+    "/api/categories/#{@category.id}/feeds"
 
-    comparator: (feed) ->
-        feed.get 'name'
+  comparator: (feed) ->
+    feed.get 'name'
 
-    setCategory: (category) ->
-        return if category is @category
+  setCategory: (category) ->
+    return if category is @category
 
-        @category = category
-        @fetch() if @category?
+    @category = category
+    @fetch() if @category?
 
 
 class PaperBox.FeedView extends Backbone.View
-    tagName: 'li'
+  tagName: 'li'
 
-    events:
-        'click': 'onClick'
+  events:
+    'click': 'onClick'
 
-    initialize: ->
-        @model.bind 'change', @render
+  initialize: ->
+    @model.bind 'change', @render
 
-    render: =>
-        $(@el).text @model.get 'name'
-        $(@el).attr 'id', 'feed-' + @model.get 'id'
-        @
+  render: =>
+    $(@el).text @model.get 'name'
+    $(@el).attr 'id', 'feed-' + @model.get 'id'
+    @
 
-    onClick: =>
-        @trigger 'activate', @model
+  onClick: =>
+    @trigger 'activate', @model
 
 
 class PaperBox.FeedsView extends Backbone.View
-    el: $('#feeds-menu')
+  el: $('#feeds-menu')
 
-    initialize: ->
-        @category = null
-        @selected = null
+  initialize: ->
+    @category = null
+    @selected = null
 
-    fetchFeeds: ->
-        return if not @category?
+  fetchFeeds: ->
+    return if not @category?
 
-        if @feeds?
-            @feeds.setCategory @category
-        else
-            @feeds = new PaperBox.Feeds [], category: @category
+    if @feeds?
+      @feeds.setCategory @category
+    else
+      @feeds = new PaperBox.Feeds [], category: @category
 
-            @feeds.bind 'add', @onAddFeed
-            @feeds.bind 'refresh', @onRefreshFeeds
+      @feeds.bind 'add', @onAddFeed
+      @feeds.bind 'refresh', @onRefreshFeeds
 
-            @feeds.fetch()
+      @feeds.fetch()
 
-    makeSortable: ->
-        $(@el).sortable
-            placeholder: 'side-menu-placeholder'
-            stop: @onDraggingStop
-            update: @onDraggingDone
+  makeSortable: ->
+    $(@el).sortable
+      placeholder: 'side-menu-placeholder'
+      stop: @onDraggingStop
+      update: @onDraggingDone
 
-        $(@el).disableSelection()
+    $(@el).disableSelection()
 
-    createFeedView: (feed) ->
-        view = new PaperBox.FeedView model: feed
-        view.bind 'activate', @onFeedActivate
+  createFeedView: (feed) ->
+    view = new PaperBox.FeedView model: feed
+    view.bind 'activate', @onFeedActivate
 
-        view
+    view
 
-    addFeed: (feed) =>
-        view = @createFeedView feed
-        $(@el).append view.render().el
+  addFeed: (feed) =>
+    view = @createFeedView feed
+    $(@el).append view.render().el
 
-    refreshFeeds: =>
-        # Empty the current list of feeds
-        # before fetching and adding all
-        $(@el).empty()
+  refreshFeeds: =>
+    # Empty the current list of feeds
+    # before fetching and adding all
+    $(@el).empty()
 
-        docFragment = document.createDocumentFragment()
+    docFragment = document.createDocumentFragment()
 
-        # Append each feed to a document
-        # docFragmentment instead of adding each one directly
-        # to the document, for better performance
-        @feeds.each (feed) =>
-            view = @createFeedView feed
-            docFragment.appendChild view.render().el
+    # Append each feed to a document
+    # docFragmentment instead of adding each one directly
+    # to the document, for better performance
+    @feeds.each (feed) =>
+      view = @createFeedView feed
+      docFragment.appendChild view.render().el
 
-        $(@el).append docFragment
+    $(@el).append docFragment
 
-        # We automatically fetch the first category
-        # on full refresh
-        @updateSelected @feeds.at 0
+    # We automatically fetch the first category
+    # on full refresh
+    @updateSelected @feeds.at 0
 
-    updateSelected: (selected) ->
-        return if selected is @selected
+  updateSelected: (selected) ->
+    return if selected is @selected
 
-        if @selected?
-            el = @getElementForFeed @selected
-            $(el).removeClass 'selected'
+    if @selected?
+      el = @getElementForFeed @selected
+      $(el).removeClass 'selected'
 
-        @selected = selected
+    @selected = selected
 
-        if @selected?
-            el = @getElementForFeed @selected
-            $(el).addClass 'selected'
+    if @selected?
+      el = @getElementForFeed @selected
+      $(el).addClass 'selected'
 
-        @trigger 'selected-changed'
+    @trigger 'selected-changed'
 
-    getSelected: ->
-        @selected
+  getSelected: ->
+    @selected
 
-    setCategory: (category) ->
-        return if category is @category
+  setCategory: (category) ->
+    return if category is @category
 
-        @category = category
-        @fetchFeeds()
+    @category = category
+    @fetchFeeds()
 
-    getElementForFeed: (feed) ->
-        $("li[id=feed-#{feed.id}]")
+  getElementForFeed: (feed) ->
+    $("li[id=feed-#{feed.id}]")
 
-    onFeedActivate: (feed) =>
-        @updateSelected feed
+  onFeedActivate: (feed) =>
+    @updateSelected feed
 
-    onAddFeed: (feed) =>
-        @addFeed(feed)
+  onAddFeed: (feed) =>
+    @addFeed(feed)
 
-    onRefreshFeeds: =>
-        @refreshFeeds()
+  onRefreshFeeds: =>
+    @refreshFeeds()

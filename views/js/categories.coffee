@@ -1,158 +1,158 @@
 class PaperBox.Category extends Backbone.Model
-    UNTITLED: 'Untitled'
+  UNTITLED: 'Untitled'
 
-    initialize: ->
-        @set 'name', @UNTITLED if @get("content")?
+  initialize: ->
+    @set 'name', @UNTITLED if @get("content")?
 
 
 class PaperBox.Categories extends Backbone.Collection
-    url: '/api/categories'
+  url: '/api/categories'
 
-    model: PaperBox.Category
+  model: PaperBox.Category
 
-    nextOrder: ->
-        1 if not @length
-        @last().get('order') + 1
+  nextOrder: ->
+    1 if not @length
+    @last().get('order') + 1
 
-    comparator: (category) ->
-        category.get 'order'
+  comparator: (category) ->
+    category.get 'order'
 
 
 class PaperBox.CategoryView extends Backbone.View
-    tagName: 'li'
+  tagName: 'li'
 
-    events:
-        'click': 'onClick'
+  events:
+    'click': 'onClick'
 
-    initialize: ->
-        @model.bind 'change', @render
+  initialize: ->
+    @model.bind 'change', @render
 
-    render: =>
-        $(@el).text @model.get 'name'
-        $(@el).attr 'id', 'category-' + @model.get 'id'
-        $(@el).data 'category-order', @model.get 'order'
+  render: =>
+    $(@el).text @model.get 'name'
+    $(@el).attr 'id', 'category-' + @model.get 'id'
+    $(@el).data 'category-order', @model.get 'order'
 
-        # FIXME: Should move the construction of CategoryView
-        # to a separate template hidden element
-        $(@el).append '<div class="handle"/>'
-        @
+    # FIXME: Should move the construction of CategoryView
+    # to a separate template hidden element
+    $(@el).append '<div class="handle"/>'
+    @
 
-    onClick: =>
-        @trigger 'activate', @model
+  onClick: =>
+    @trigger 'activate', @model
 
 class PaperBox.CategoriesView extends Backbone.View
-    el: $('#categories-menu')
+  el: $('#categories-menu')
 
-    initialize: ->
-        @selected = null
+  initialize: ->
+    @selected = null
 
-        @fetchCategories()
-        @makeSortable()
+    @fetchCategories()
+    @makeSortable()
 
-    fetchCategories: ->
-        @categories = new PaperBox.Categories
+  fetchCategories: ->
+    @categories = new PaperBox.Categories
 
-        @categories.bind 'add', @onAddCategory
-        @categories.bind 'refresh', @onRefreshCategories
+    @categories.bind 'add', @onAddCategory
+    @categories.bind 'refresh', @onRefreshCategories
 
-        @categories.fetch()
+    @categories.fetch()
 
-    makeSortable: ->
-        $(@el).sortable
-            placeholder: 'side-menu-placeholder'
-            handle: '.handle'
-            stop: @onDraggingStop
-            update: @onDraggingDone
+  makeSortable: ->
+    $(@el).sortable
+      placeholder: 'side-menu-placeholder'
+      handle: '.handle'
+      stop: @onDraggingStop
+      update: @onDraggingDone
 
-        $(@el).disableSelection()
+    $(@el).disableSelection()
 
-    createCategoryView: (category) ->
-        view = new PaperBox.CategoryView model: category
-        view.bind 'activate', @onCategoryActivate
+  createCategoryView: (category) ->
+    view = new PaperBox.CategoryView model: category
+    view.bind 'activate', @onCategoryActivate
 
-        view
+    view
 
-    addCategory: (category) =>
-        view = @createCategoryView category
-        $(@el).append view.render().el
+  addCategory: (category) =>
+    view = @createCategoryView category
+    $(@el).append view.render().el
 
-    refreshCategories: =>
-        # Empty the current list of categories
-        # before fetching and adding all
-        $(@el).empty()
+  refreshCategories: =>
+    # Empty the current list of categories
+    # before fetching and adding all
+    $(@el).empty()
 
-        docFragment = document.createDocumentFragment()
+    docFragment = document.createDocumentFragment()
 
-        # Append each category to a document
-        # docFragmentment instead of adding each one directly
-        # to the document, for better performance
-        @categories.each (category) =>
-            view = @createCategoryView category
-            docFragment.appendChild view.render().el
+    # Append each category to a document
+    # docFragmentment instead of adding each one directly
+    # to the document, for better performance
+    @categories.each (category) =>
+      view = @createCategoryView category
+      docFragment.appendChild view.render().el
 
-        $(@el).append docFragment
+    $(@el).append docFragment
 
-        # We automatically fetch the first category
-        # on full refresh
-        @updateSelected @categories.at 0
+    # We automatically fetch the first category
+    # on full refresh
+    @updateSelected @categories.at 0
 
-    updateSelected: (selected) ->
-        return if selected is @selected
+  updateSelected: (selected) ->
+    return if selected is @selected
 
-        if @selected?
-            el = @getElementForCategory @selected
-            $(el).removeClass 'selected'
+    if @selected?
+      el = @getElementForCategory @selected
+      $(el).removeClass 'selected'
 
-        @selected = selected
+    @selected = selected
 
-        if @selected?
-            el = @getElementForCategory @selected
-            $(el).addClass 'selected'
+    if @selected?
+      el = @getElementForCategory @selected
+      $(el).addClass 'selected'
 
-        @trigger 'selected-changed'
+    @trigger 'selected-changed'
 
-    getSelected: ->
-        @selected
+  getSelected: ->
+    @selected
 
-    getElementForCategory: (category) ->
-        $("li[id=category-#{category.id}]")
+  getElementForCategory: (category) ->
+    $("li[id=category-#{category.id}]")
 
-    onCategoryActivate: (category) =>
-        @updateSelected category
+  onCategoryActivate: (category) =>
+    @updateSelected category
 
-    onAddCategory: (category) =>
-        @addCategory category
+  onAddCategory: (category) =>
+    @addCategory category
 
-    onRefreshCategories: =>
-        @refreshCategories()
+  onRefreshCategories: =>
+    @refreshCategories()
 
-    onDraggingStop: (event, ui) =>
-        newOrder = $(ui.item).index()
-        previousOrder = $(ui.item).data 'category-order'
+  onDraggingStop: (event, ui) =>
+    newOrder = $(ui.item).index()
+    previousOrder = $(ui.item).data 'category-order'
 
-        return if newOrder is previousOrder
+    return if newOrder is previousOrder
 
-        # Only update the set of list items that actually
-        # need changes in the order property.
-        for index in [previousOrder..newOrder]
-            do (index) =>
-                model = @categories.at index
+    # Only update the set of list items that actually
+    # need changes in the order property.
+    for index in [previousOrder..newOrder]
+      do (index) =>
+        model = @categories.at index
 
-                # We're selecting list items by id here to avoid
-                # using an extra custom jQuery plugin to do data-based
-                # selection. List item ids are set in CategoryView.
-                el = @getElementForCategory model
+        # We're selecting list items by id here to avoid
+        # using an extra custom jQuery plugin to do data-based
+        # selection. List item ids are set in CategoryView.
+        el = @getElementForCategory model
 
-                newIndex = $(el).index()
+        newIndex = $(el).index()
 
-                # We use 'silent' option here to avoid
-                # broadcasting 'change' anywhere
-                model.set { 'order': newIndex },
-                          { 'silent': true }
+        # We use 'silent' option here to avoid
+        # broadcasting 'change' anywhere
+        model.set { 'order': newIndex },
+              { 'silent': true }
 
-                # Update element data with new index
-                $(el).data 'category-order', newIndex
+        # Update element data with new index
+        $(el).data 'category-order', newIndex
 
-                model.save()
+        model.save()
 
-        @categories.sort silent: true
+    @categories.sort silent: true
