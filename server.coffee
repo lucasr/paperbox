@@ -33,7 +33,31 @@ for c in CATEGORIES
             f.entries.push
                 id: i
                 title: "Feed #{f.id}, Entry #{i}"
-                content: '<p>Par 1</p><p>Par 2</p><p>Par 3</p>'
+                date: Math.floor(Date.now() / 1000) + i
+                body: "<p>
+                         Par 1 no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                       </p>
+                       <p>
+                         Par 2 no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                       </p>
+                       <p>
+                         Par 3 no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                         no no no no no no no no no no no no no no no no
+                       </p>"
 
 app.configure ->
     app.set 'views', __dirname + '/views'
