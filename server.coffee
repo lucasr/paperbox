@@ -17,22 +17,26 @@ CATEGORIES = [
   { id: 10, name: 'Cat 10', order: 9 }
 ]
 
+feedId = 1
+entryId = 1
+
 POSTS = {}
 for c in CATEGORIES
   c.feeds = []
 
-  for j in [1...8]
+  for j in [1...11]
     c.feeds.push
-      id: j
-      name: "Cat #{c.id}, Feed #{j}"
+      id: feedId
+      name: "Cat #{c.id}, Feed #{feedId}"
+    feedId++
 
   for f in c.feeds
     f.entries = []
 
     for i in [1...11]
       f.entries.push
-        id: i
-        title: "Feed #{f.id}, Entry #{i}"
+        id: entryId
+        title: "Feed #{f.id}, Entry #{entryId}"
         date: Math.floor(Date.now() / 1000) + i
         body: "<p>
                  Par 1 no no no no no no no no no no no no no no
@@ -58,6 +62,7 @@ for c in CATEGORIES
                  no no no no no no no no no no no no no no no no
                  no no no no no no no no no no no no no no no no
                </p>"
+      entryId++
 
 app.configure ->
   app.set 'views', __dirname + '/views'
