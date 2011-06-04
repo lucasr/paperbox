@@ -21,9 +21,7 @@ class PaperBox.Feeds extends Backbone.Collection
 
   setCategory: (category) ->
     return if category is @category
-
     @category = category
-    @fetch() if @category?
 
 
 class PaperBox.FeedView extends Backbone.View
@@ -51,19 +49,6 @@ class PaperBox.FeedsView extends Backbone.View
     @category = null
     @selected = null
 
-  fetchFeeds: ->
-    return if not @category?
-
-    if @feeds?
-      @feeds.setCategory @category
-    else
-      @feeds = new PaperBox.Feeds [], category: @category
-
-      @feeds.bind 'add', @onAddFeed
-      @feeds.bind 'refresh', @onRefreshFeeds
-
-      @feeds.fetch()
-
   makeSortable: ->
     $(@el).sortable
       placeholder: 'side-menu-placeholder'
@@ -87,12 +72,16 @@ class PaperBox.FeedsView extends Backbone.View
     # before fetching and adding all
     $(@el).empty()
 
+    return if not @category
+
+    feeds = @category.getFeeds()
+
     docFragment = document.createDocumentFragment()
 
     # Append each feed to a document
     # docFragmentment instead of adding each one directly
     # to the document, for better performance
-    @feeds.each (feed) =>
+    feeds.each (feed) =>
       view = @createFeedView feed
       docFragment.appendChild view.render().el
 
@@ -100,7 +89,7 @@ class PaperBox.FeedsView extends Backbone.View
 
     # We automatically fetch the first category
     # on full refresh
-    @updateSelected @feeds.at 0
+    @updateSelected feeds.at 0
 
   updateSelected: (selected) ->
     return if selected is @selected
@@ -123,8 +112,19 @@ class PaperBox.FeedsView extends Backbone.View
   setCategory: (category) ->
     return if category is @category
 
+    if @category?
+      feeds = @category.getFeeds()
+      feeds.unbind 'add', @onAddFeed
+      feeds.unbind 'refresh', @onRefreshFeeds
+
     @category = category
-    @fetchFeeds()
+
+    if @category?
+      feeds = @category.getFeeds()
+      feeds.bind 'add', @onAddFeed
+      feeds.bind 'refresh', @onRefreshFeeds
+
+    @refreshFeeds()
 
   getElementForFeed: (feed) ->
     $("li[id=feed-#{feed.id}]")
