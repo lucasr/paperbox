@@ -105,6 +105,7 @@ class PaperBox.EntriesView extends Backbone.View
 
   createEntryView: (entry) ->
     view = new PaperBox.EntryView model: entry, viewMode: @viewMode
+    view
 
   addEntry: (entry) =>
     view = @createEntryView entry
