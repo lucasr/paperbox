@@ -111,6 +111,8 @@ class PaperBox.EntriesView extends Backbone.View
     $(@el).append view.render().el
 
   refreshEntries: =>
+    return if not @entries?
+
     # Empty the current list of entries
     # before fetching and adding all
     $(@el).empty()
