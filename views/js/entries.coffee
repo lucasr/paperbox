@@ -147,6 +147,12 @@ class PaperBox.EntriesView extends Backbone.View
     # Add class corresponding to new mode
     $('#content').addClass @viewMode if @viewMode?
 
+    # We could re-render all individual elements in the
+    # container but that would involve a lot of relayouts
+    # and redraws. We better just empty the container and
+    # insert all re-rendered elements at once
+    @refreshEntries()
+
   onAddEntry: (entry) =>
     @addEntry(entry)
 
