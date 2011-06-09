@@ -36,6 +36,9 @@ class PaperBox.EntryView extends Backbone.View
   MAX_CHARS: 210
   TITLE_MAX_CHARS: 110
 
+  events:
+    'click': 'onClick'
+
   tagName: 'div'
 
   template: _.template $('#entry-template').html()
@@ -77,6 +80,10 @@ class PaperBox.EntryView extends Backbone.View
       @$('.content').html body
 
     @
+
+  onClick: =>
+    if @viewMode is PaperBox.EntriesViewMode.OVERVIEW
+      @trigger 'activate', @model
 
 class PaperBox.EntriesView extends Backbone.View
   el: $('#content')
