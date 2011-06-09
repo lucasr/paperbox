@@ -33,7 +33,7 @@ for c in CATEGORIES
   for f in c.feeds
     f.entries = []
 
-    for i in [1...11]
+    for i in [1...31]
       f.entries.push
         id: entryId
         title: "Entry #{entryId} (Feed #{f.id})"
