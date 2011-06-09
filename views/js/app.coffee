@@ -1,8 +1,15 @@
 class PaperBox.AppView extends Backbone.View
+  el: $('body')
+
+  events:
+    'click #view-mode-overview': 'onViewModeOverview'
+    'click #view-mode-full': 'onViewModeFull'
+
   initialize: ->
     @createCategoriesView()
     @createFeedsView()
     @createEntriesView()
+    @updateViewMode()
 
   createCategoriesView: ->
     @categoriesView = new PaperBox.CategoriesView
@@ -14,6 +21,16 @@ class PaperBox.AppView extends Backbone.View
 
   createEntriesView: ->
     @entriesView = new PaperBox.EntriesView
+
+  updateViewMode: (viewMode = PaperBox.EntriesViewMode.OVERVIEW) ->
+    @entriesView.setViewMode viewMode
+
+    # Add 'selected' class to the respective mode button
+    for viewId, aViewMode of PaperBox.EntriesViewMode
+      if aViewMode is viewMode
+        $("#view-mode-#{aViewMode}").addClass 'selected'
+      else
+        $("#view-mode-#{aViewMode}").removeClass 'selected'
 
   updateHeaderForCategory: (category) ->
     $('#category-title').text category.get 'name'
@@ -37,3 +54,9 @@ class PaperBox.AppView extends Backbone.View
     @updateScroll()
     @updateHeaderForFeed feed
     @entriesView.setCategoryAndFeed category, feed
+
+  onViewModeOverview: =>
+    @updateViewMode PaperBox.EntriesViewMode.OVERVIEW
+
+  onViewModeFull: =>
+    @updateViewMode PaperBox.EntriesViewMode.FULL
