@@ -112,6 +112,8 @@ class PaperBox.EntriesView extends Backbone.View
 
   createEntryView: (entry) ->
     view = new PaperBox.EntryView model: entry, viewMode: @viewMode
+    view.bind 'activate', @onEntryActivate
+
     view
 
   addEntry: (entry) =>
@@ -160,6 +162,9 @@ class PaperBox.EntriesView extends Backbone.View
     # and redraws. We better just empty the container and
     # insert all re-rendered elements at once
     @refreshEntries()
+
+  onEntryActivate: (entry) =>
+    @trigger 'entry-activate', entry
 
   onAddEntry: (entry) =>
     @addEntry(entry)
