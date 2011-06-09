@@ -21,6 +21,7 @@ class PaperBox.AppView extends Backbone.View
 
   createEntriesView: ->
     @entriesView = new PaperBox.EntriesView
+    @entriesView.bind 'entry-activate', @onEntryActivate
 
   updateViewMode: (viewMode = PaperBox.EntriesViewMode.OVERVIEW) ->
     @entriesView.setViewMode viewMode
@@ -54,6 +55,18 @@ class PaperBox.AppView extends Backbone.View
     @updateScroll()
     @updateHeaderForFeed feed
     @entriesView.setCategoryAndFeed category, feed
+
+  onEntryActivate: (entry) =>
+    @updateViewMode PaperBox.EntriesViewMode.FULL
+
+    # We have to compensate the header height when setting
+    # the scroll top as the #content div is offset by its
+    # height
+    scrollTop = $("#entry-#{entry.id}").offset().top -
+                $('#header').height()
+
+    # Scroll to the activated entry in full view mode
+    $(window).scrollTop scrollTop
 
   onViewModeOverview: =>
     @updateViewMode PaperBox.EntriesViewMode.OVERVIEW
