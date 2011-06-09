@@ -36,7 +36,7 @@ for c in CATEGORIES
     for i in [1...11]
       f.entries.push
         id: entryId
-        title: "Feed #{f.id}, Entry #{entryId}"
+        title: "Entry #{entryId} (Feed #{f.id})"
         date: Math.floor(Date.now() / 1000) + i
         body: "<p>
                  Par 1 no no no no no no no no no no no no no no
