@@ -33,11 +33,15 @@ class PaperBox.Entries extends Backbone.Collection
 
 
 class PaperBox.EntryView extends Backbone.View
+  MAX_CHARS: 210
+  TITLE_MAX_CHARS: 110
+
   tagName: 'div'
 
   template: _.template $('#entry-template').html()
 
-  initialize: ->
+  initialize: (options) ->
+    @viewMode = options.viewMode
     @model.bind 'change', @render
 
   render: =>
@@ -45,10 +49,34 @@ class PaperBox.EntryView extends Backbone.View
     $(@el).addClass 'entry'
     $(@el).attr 'id', 'entry-' + @model.get 'id'
 
-    @$('.title h1').text @model.get 'title'
-    @$('.content').html @model.get 'body'
-    @
+    title = @model.get 'title'
+    body = @model.get 'body'
 
+    if @viewMode is PaperBox.EntriesViewMode.OVERVIEW
+      # Truncate and ellipsize title text if necessary
+      # We allow a maximum of TITLE_MAX_CHARS chars in
+      # the title
+      if title.length > @TITLE_MAX_CHARS
+        title = title.substring(0, @TITLE_MAX_CHARS - 3) + "..."
+
+      # Strip all HTML tags from body text
+      body = body.replace /(<([^>]+)>)/ig, ''
+
+      # Truncate and ellipsize body text if necessary
+      if body.length > @MAX_CHARS - title.length
+        body = body.substring(0, @MAX_CHARS - title.length - 1) + "..."
+
+      # The whole entry content is set inside the title
+      # h1 tag for simplicity
+      @$('.title h1').html "<b>#{title}</b> #{body}"
+
+      # The #content element is not used so we remove it
+      @$('.content').remove()
+    else
+      @$('.title h1').text title
+      @$('.content').html body
+
+    @
 
 class PaperBox.EntriesView extends Backbone.View
   el: $('#content')
@@ -76,7 +104,7 @@ class PaperBox.EntriesView extends Backbone.View
       @entries.fetch()
 
   createEntryView: (entry) ->
-    view = new PaperBox.EntryView model: entry
+    view = new PaperBox.EntryView model: entry, viewMode: @viewMode
 
   addEntry: (entry) =>
     view = @createEntryView entry
