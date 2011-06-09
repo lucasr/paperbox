@@ -92,6 +92,9 @@ ul.segmented-button li
   float left
   display block
 
+ul.segmented-button li:hover
+  cursor pointer
+
 ul.segmented-button li:last-child
   border-right 0px
 
@@ -121,6 +124,9 @@ ul.segmented-button li.selected
   padding-right 20px
   min-height 400px
   box-shadow(0px 0px 7px #888)
+
+#content.overview
+  float left
 
 #right
   position fixed
@@ -175,13 +181,13 @@ ul.side-menu li:hover .handle:hover
 ul#categories-menu
   margin-left -11px
 
-.entry
+#content.full > .entry
   margin-bottom 40px
 
-.entry:last-child
+#content.full > .entry:last-child
   margin-bottom 20px
 
-.entry .title h1
+#content.full > .entry .title h1
   font-size 22px
   margin 0px
   margin-bottom 2px
@@ -189,6 +195,34 @@ ul#categories-menu
   display block
   border-bottom 2px solid #DDD
 
-.entry .content
+#content.full .entry .content
   clear both
   line-height 1.8em
+
+#content.overview > .entry
+  margin 5px
+  float left
+  width 270px
+  height 70px
+
+#content.overview > .entry:last-child
+  margin-bottom 40px
+
+#content.overview > .entry .title h1
+  font-size 16px
+  margin 5px
+  padding 0px
+  font-weight bold
+  float left
+
+#content.overview .entry .content
+  white-space nowrap
+  overflow hidden
+  text-overflow ellipsis
+  color #CCC
+  line-height 1.8em
+  margin 0px
+
+#content.overview .entry .content *
+  font-size 14px
+  margin 0px

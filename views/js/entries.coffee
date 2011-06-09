@@ -1,3 +1,7 @@
+PaperBox.EntriesViewMode =
+    OVERVIEW : 'overview'
+    FULL     : 'full'
+
 class PaperBox.Entry extends Backbone.Model
   UNTITLED: 'Untitled'
 
@@ -50,6 +54,7 @@ class PaperBox.EntriesView extends Backbone.View
   el: $('#content')
 
   initialize: ->
+    @viewMode = null
     @category = null
     @feed = null
 
@@ -100,6 +105,17 @@ class PaperBox.EntriesView extends Backbone.View
     @feed = feed
 
     @fetchEntries()
+
+  setViewMode: (viewMode) ->
+    return if viewMode is @viewMode
+
+    # Remove class corresponding to previous mode
+    $('#content').removeClass @viewMode if @viewMode?
+
+    @viewMode = viewMode
+
+    # Add class corresponding to new mode
+    $('#content').addClass @viewMode if @viewMode?
 
   onAddEntry: (entry) =>
     @addEntry(entry)
