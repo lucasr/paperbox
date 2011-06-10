@@ -178,9 +178,18 @@ loadEntry = (req, res, next, entryId) ->
   id = parseInt entryId, 10
 
   # Given that the entries routes depend on feedId
-  # we should have a feed set on request when we
-  # reach this point.
-  found = req.feed.entries.filter (p) -> id is p.id
+  # and categoryId, we should have a category and feed
+  # set on request when we reach this point.
+
+  c = CATEGORIES.filter (c) -> req.category.id is c.id
+  if c.length isnt 1
+    return next(new Error('Unable to find category'))
+
+  f = c[0].feeds.filter (f) -> req.feed.id is f.id
+  if f.length isnt 1
+    return next(new Error('Unable to find feed'))
+
+  found = f[0].entries.filter (p) -> id is p.id
 
   if found.length isnt 1
     return next(new Error('Unable to find entry'))
