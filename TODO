@@ -1,1 +1,2 @@
 - Prefix private methods with '_'
+- scrollToEntry in EntriesView
