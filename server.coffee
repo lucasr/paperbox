@@ -120,6 +120,9 @@ app.configure 'production', ->
 app.get '/', (req, res) ->
   res.render 'index', title: 'PaperBox'
 
+copyNonObjectProperties = (source, target) ->
+  target[k] = v for k, v of source when typeof(v) isnt 'object'
+
 loadCategory = (req, res, next, categoryId) ->
   # The categoryId might be undefined when using
   # the /categories with no id. Don't do anything
@@ -133,7 +136,15 @@ loadCategory = (req, res, next, categoryId) ->
   if found.length isnt 1
     return next(new Error('Unable to find category'))
 
-  req.category = found[0]
+  req.category = {}
+  copyNonObjectProperties found[0], req.category
+
+  req.category.feeds = []
+  for f in found[0].feeds
+    feed = {}
+    copyNonObjectProperties f, feed
+
+    req.category.feeds.push feed
 
   next()
 
@@ -153,7 +164,8 @@ loadFeed = (req, res, next, feedId) ->
   if found.length isnt 1
     return next(new Error('Unable to find feed'))
 
-  req.feed = found[0]
+  req.feed = {}
+  copyNonObjectProperties found[0], req.feed
 
   next()
 
