@@ -89,6 +89,7 @@ class PaperBox.EntriesView extends Backbone.View
   el: $('#content')
 
   initialize: ->
+    @activeEntry = null
     @viewMode = null
     @category = null
     @feed = null
@@ -109,6 +110,22 @@ class PaperBox.EntriesView extends Backbone.View
       @entries.bind 'refresh', @onRefreshEntries
 
       @entries.fetch()
+
+  getElementForEntry: (entry) ->
+    $("[id=entry-#{entry.id}]")
+
+  setActiveEntry: (activeEntry) ->
+    return if activeEntry is @activeEntry
+
+    if @activeEntry?
+      el = @getElementForEntry @activeEntry
+      $(el).removeClass 'active'
+
+    @activeEntry = activeEntry
+
+    if @activeEntry?
+      el = @getElementForEntry @activeEntry
+      $(el).addClass 'active'
 
   createEntryView: (entry) ->
     view = new PaperBox.EntryView model: entry, viewMode: @viewMode
