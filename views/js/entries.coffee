@@ -148,7 +148,7 @@ class PaperBox.EntriesView extends Backbone.View
 
       bottom = top + $(el).height() - headerHeight
 
-      if 0 < top - windowTop < active or
+      if 0 <= top - windowTop < active or
          active * 0.3 < bottom - windowTop < active
         @setActiveEntry @entries.at index
         return false
