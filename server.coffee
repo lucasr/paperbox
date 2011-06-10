@@ -189,6 +189,15 @@ loadEntry = (req, res, next, entryId) ->
 
   next()
 
+loadEntries = (category, feed) ->
+  c = CATEGORIES.filter (c) -> category.id is c.id
+  throw new Error 'Unable to find category' if c.length is 0
+
+  f = c[0].feeds.filter (f) -> feed.id is f.id
+  throw new Error 'Unable to find feed' if f.length is 0
+
+  f[0].entries
+
 app.param 'categoryId', loadCategory
 app.param 'feedId', loadFeed
 app.param 'entryId', loadEntry
@@ -209,7 +218,7 @@ app.get '/api/categories/:categoryId/feeds/:feedId/entries/:entryId?', (req, res
   if 'entry' of req
     res.send req.entry
   else
-    res.send req.feed.entries
+    res.send loadEntries req.category, req.feed
 
 app.put '/api/categories/:categoryId', (req, res) ->
   req.category.name = req.body.name
