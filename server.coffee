@@ -20,7 +20,6 @@ CATEGORIES = [
 feedId = 1
 entryId = 1
 
-POSTS = {}
 for c in CATEGORIES
   c.feeds = []
 
