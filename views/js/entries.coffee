@@ -94,6 +94,11 @@ class PaperBox.EntriesView extends Backbone.View
     @category = null
     @feed = null
 
+    @trackScrollPosition()
+
+  trackScrollPosition: ->
+    $(window).scroll @onWindowScroll
+
   fetchEntries: ->
     return if not @category? or not @feed?
 
@@ -126,6 +131,27 @@ class PaperBox.EntriesView extends Backbone.View
     if @activeEntry?
       el = @getElementForEntry @activeEntry
       $(el).addClass 'active'
+
+  updateActiveEntryFromScroll: ->
+    # FIXME: This is highly inefficient. We should come up
+    # with a better way to update active entry from scroll
+
+    windowTop = $(window).scrollTop()
+    windowHeight = $(window).height()
+    headerHeight = $('#header').height()
+    active = windowHeight * 0.9
+
+    $(@el).children().each (index, el) =>
+      top = $(el).offset().top - headerHeight
+
+      return if top < windowTop
+
+      bottom = top + $(el).height() - headerHeight
+
+      if 0 < top - windowTop < active or
+         active * 0.3 < bottom - windowTop < active
+        @setActiveEntry @entries.at index
+        return false
 
   createEntryView: (entry) ->
     view = new PaperBox.EntryView model: entry, viewMode: @viewMode
@@ -179,6 +205,9 @@ class PaperBox.EntriesView extends Backbone.View
     # and redraws. We better just empty the container and
     # insert all re-rendered elements at once
     @refreshEntries()
+
+  onWindowScroll: =>
+    @updateActiveEntryFromScroll() if @viewMode is PaperBox.EntriesViewMode.FULL
 
   onEntryActivate: (entry) =>
     @trigger 'entry-activate', entry
