@@ -59,15 +59,6 @@ class PaperBox.AppView extends Backbone.View
   onEntryActivate: (entry) =>
     @updateViewMode PaperBox.EntriesViewMode.FULL
 
-    # We have to compensate the header height when setting
-    # the scroll top as the #content div is offset by its
-    # height
-    scrollTop = $("#entry-#{entry.id}").offset().top -
-                $('#header').height()
-
-    # Scroll to the activated entry in full view mode
-    $(window).scrollTop scrollTop
-
   onViewModeOverview: =>
     @updateViewMode PaperBox.EntriesViewMode.OVERVIEW
 

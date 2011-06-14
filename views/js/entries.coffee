@@ -153,6 +153,20 @@ class PaperBox.EntriesView extends Backbone.View
         @setActiveEntry @entries.at index
         return false
 
+  getEntryViewScrollTop: (entry) ->
+    return if not entry?
+
+    # We have to compensate the header height when setting
+    # the scroll top as the #content div is offset by its
+    # height
+    $("#entry-#{entry.id}").offset().top - $('#header').height()
+
+  scrollToActiveEntry: ->
+    return if not @activeEntry?
+
+    # Scroll to the activated entry in full view mode
+    $(window).scrollTop @getEntryViewScrollTop @activeEntry
+
   createEntryView: (entry) ->
     view = new PaperBox.EntryView model: entry, viewMode: @viewMode
     view.bind 'activate', @onEntryActivate
@@ -206,10 +220,14 @@ class PaperBox.EntriesView extends Backbone.View
     # insert all re-rendered elements at once
     @refreshEntries()
 
+    # Update scroll position to show active entry on top
+    @scrollToActiveEntry()
+
   onWindowScroll: =>
     @updateActiveEntryFromScroll() if @viewMode is PaperBox.EntriesViewMode.FULL
 
   onEntryActivate: (entry) =>
+    @setActiveEntry entry
     @trigger 'entry-activate', entry
 
   onAddEntry: (entry) =>
