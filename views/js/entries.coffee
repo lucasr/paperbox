@@ -119,18 +119,20 @@ class PaperBox.EntriesView extends Backbone.View
   getElementForEntry: (entry) ->
     $("[id=entry-#{entry.id}]")
 
+  setEntryIsActive: (entry, isActive, el) ->
+    el = @getElementForEntry entry if not el?
+    $(el).toggleClass 'active', isActive if el?
+
   setActiveEntry: (activeEntry) ->
     return if activeEntry is @activeEntry
 
     if @activeEntry?
-      el = @getElementForEntry @activeEntry
-      $(el).removeClass 'active'
+      @setEntryIsActive @activeEntry, off
 
     @activeEntry = activeEntry
 
     if @activeEntry?
-      el = @getElementForEntry @activeEntry
-      $(el).addClass 'active'
+      @setEntryIsActive @activeEntry, on
 
   updateActiveEntryFromScroll: ->
     # FIXME: This is highly inefficient. We should come up
