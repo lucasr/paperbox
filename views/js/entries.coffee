@@ -141,19 +141,13 @@ class PaperBox.EntriesView extends Backbone.View
     windowTop = $(window).scrollTop()
     windowHeight = $(window).height()
     headerHeight = $('#header').height()
-    active = windowHeight * 0.9
 
     $(@el).children().each (index, el) =>
       top = $(el).offset().top - headerHeight
 
-      return if top < windowTop
-
-      bottom = top + $(el).height() - headerHeight
-
-      if 0 <= top - windowTop < active or
-         active * 0.3 < bottom - windowTop < active
+      if windowTop <= top <= windowTop + windowHeight
         @setActiveEntry @entries.at index
-        return false
+        false
 
   getEntryViewScrollTop: (entry) ->
     return if not entry?
