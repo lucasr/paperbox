@@ -173,6 +173,8 @@ class PaperBox.EntriesView extends Backbone.View
     view = new PaperBox.EntryView model: entry, viewMode: @viewMode
     view.bind 'activate', @onEntryActivate
 
+    @setEntryIsActive entry, on, view.el if entry is @activeEntry
+
     view
 
   addEntry: (entry) =>
