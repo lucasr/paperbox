@@ -10,6 +10,7 @@ class PaperBox.AppView extends Backbone.View
     @createFeedsView()
     @createEntriesView()
     @updateViewMode()
+    @setupGlobalShortcuts()
 
   createCategoriesView: ->
     @categoriesView = new PaperBox.CategoriesView
@@ -33,6 +34,9 @@ class PaperBox.AppView extends Backbone.View
       else
         $("#view-mode-#{aViewMode}").removeClass 'selected'
 
+  setupGlobalShortcuts: ->
+    $(document).keypress @onDocumentKeyPress
+
   updateHeaderForCategory: (category) ->
     $('#category-title').text category.get 'name'
 
@@ -41,6 +45,27 @@ class PaperBox.AppView extends Backbone.View
 
   updateScroll: ->
     $('html, body').scrollTop(0)
+
+  toggleViewMode: ->
+    if @entriesView.getViewMode() is PaperBox.EntriesViewMode.FULL
+      viewMode = PaperBox.EntriesViewMode.OVERVIEW
+    else
+      viewMode = PaperBox.EntriesViewMode.FULL
+
+    @updateViewMode viewMode
+
+  onDocumentKeyPress: (event) =>
+    handled = false
+
+    switch event.charCode
+      # 'v' toggles view modes
+      when 118
+        @toggleViewMode()
+        handled = true
+
+    if handled
+      event.preventDefault()
+      event.stopPropagation()
 
   onCategoryChanged: =>
     category = @categoriesView.getSelected()
