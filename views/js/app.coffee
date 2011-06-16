@@ -54,6 +54,12 @@ class PaperBox.AppView extends Backbone.View
 
     @updateViewMode viewMode
 
+  goToPreviousFeed: ->
+    @feedsView.goToPreviousFeed()
+
+  goToNextFeed: ->
+    @feedsView.goToNextFeed()
+
   goToPreviousEntry: ->
     @entriesView.goToPreviousEntry()
 
@@ -63,7 +69,18 @@ class PaperBox.AppView extends Backbone.View
   onDocumentKeyPress: (event) =>
     handled = false
 
+    alert event.charCode
     switch event.charCode
+      # 'g' selects previous feed
+      when 103
+        @goToPreviousFeed()
+        handled = true
+
+      # 'h' selects next feed
+      when 104
+        @goToNextFeed()
+        handled = true
+
       # 'j' toggles view modes
       when 106
         @goToPreviousEntry()
