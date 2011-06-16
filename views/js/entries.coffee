@@ -225,6 +225,22 @@ class PaperBox.EntriesView extends Backbone.View
   getViewMode: ->
     @viewMode
 
+  goToPreviousEntry: ->
+    return if @viewMode is PaperBox.EntriesViewMode.OVERVIEW
+    index = @entries.indexOf @activeEntry
+
+    if index - 1 >= 0
+      @setActiveEntry @entries.at index - 1
+      @scrollToActiveEntry()
+
+  goToNextEntry: ->
+    return if @viewMode is PaperBox.EntriesViewMode.OVERVIEW
+    index = @entries.indexOf @activeEntry
+
+    if index + 1 < @entries.size()
+      @setActiveEntry @entries.at index + 1
+      @scrollToActiveEntry()
+
   onWindowScroll: =>
     @updateActiveEntryFromScroll()
 
