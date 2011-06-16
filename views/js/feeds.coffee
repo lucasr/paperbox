@@ -101,6 +101,24 @@ class PaperBox.FeedsView extends Backbone.View
   getSelected: ->
     @selected
 
+  goToPreviousFeed: ->
+    return if not @category?
+
+    feeds = @category.getFeeds()
+    index = feeds.indexOf @selected
+
+    if index - 1 >= 0
+      @updateSelected feeds.at index - 1
+
+  goToNextFeed: ->
+    return if not @category?
+
+    feeds = @category.getFeeds()
+    index = feeds.indexOf @selected
+
+    if index + 1 < feeds.size()
+      @updateSelected feeds.at index + 1
+
   setCategory: (category) ->
     return if category is @category
 
