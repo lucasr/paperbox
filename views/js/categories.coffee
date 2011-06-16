@@ -115,6 +115,18 @@ class PaperBox.CategoriesView extends Backbone.View
 
     @trigger 'selected-changed'
 
+  goToPreviousCategory: ->
+    index = @categories.indexOf @selected
+
+    if index - 1 >= 0
+      @updateSelected @categories.at index - 1
+
+  goToNextCategory: ->
+    index = @categories.indexOf @selected
+
+    if index + 1 < @categories.size()
+      @updateSelected @categories.at index + 1
+
   getSelected: ->
     @selected
 
