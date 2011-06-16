@@ -226,7 +226,7 @@ class PaperBox.EntriesView extends Backbone.View
     @viewMode
 
   onWindowScroll: =>
-    @updateActiveEntryFromScroll() if @viewMode is PaperBox.EntriesViewMode.FULL
+    @updateActiveEntryFromScroll()
 
   onEntryActivate: (entry) =>
     @setActiveEntry entry
