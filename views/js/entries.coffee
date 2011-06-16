@@ -222,6 +222,9 @@ class PaperBox.EntriesView extends Backbone.View
     # Update scroll position to show active entry on top
     @scrollToActiveEntry()
 
+  getViewMode: ->
+    @viewMode
+
   onWindowScroll: =>
     @updateActiveEntryFromScroll() if @viewMode is PaperBox.EntriesViewMode.FULL
 
