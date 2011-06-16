@@ -54,10 +54,26 @@ class PaperBox.AppView extends Backbone.View
 
     @updateViewMode viewMode
 
+  goToPreviousEntry: ->
+    @entriesView.goToPreviousEntry()
+
+  goToNextEntry: ->
+    @entriesView.goToNextEntry()
+
   onDocumentKeyPress: (event) =>
     handled = false
 
     switch event.charCode
+      # 'j' toggles view modes
+      when 106
+        @goToPreviousEntry()
+        handled = true
+
+      # 'k' toggles goTo modes
+      when 107
+        @goToNextEntry()
+        handled = true
+
       # 'v' toggles view modes
       when 118
         @toggleViewMode()
