@@ -132,6 +132,10 @@ class PaperBox.CategoriesView extends Backbone.View
   getSelected: ->
     @selected
 
+  selectCategoryFromId: (categoryId) ->
+    category = @categories.detect (c) -> c.id is categoryId
+    @updateSelected category if category?
+
   getElementForCategory: (category) ->
     $("li[id=category-#{category.id}]")
 
