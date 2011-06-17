@@ -12,10 +12,6 @@ class PaperBox.Entry extends Backbone.Model
 class PaperBox.Entries extends Backbone.Collection
   model: PaperBox.Entry
 
-  initialize: (models, options) ->
-    if 'category' of options and 'feed' of options
-      @setCategoryAndFeed options.category, options.feed
-
   url: ->
     null if not @category? or not @feed?
     "/api/categories/#{@category.id}/feeds/#{@feed.id}/entries"
