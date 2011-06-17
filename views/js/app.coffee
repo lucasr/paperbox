@@ -43,9 +43,6 @@ class PaperBox.AppView extends Backbone.View
   updateHeaderForFeed: (feed) ->
     $('#feed-title').text feed.get 'name'
 
-  updateScroll: ->
-    $('html, body').scrollTop(0)
-
   toggleViewMode: ->
     if @entriesView.getViewMode() is PaperBox.EntriesViewMode.FULL
       viewMode = PaperBox.EntriesViewMode.OVERVIEW
@@ -125,7 +122,6 @@ class PaperBox.AppView extends Backbone.View
     category = @categoriesView.getSelected()
     feed = @feedsView.getSelected()
 
-    @updateScroll()
     @updateHeaderForFeed feed
     @entriesView.setCategoryAndFeed category, feed
 

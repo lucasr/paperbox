@@ -194,11 +194,17 @@ class PaperBox.EntriesView extends Backbone.View
 
     $(@el).append docFragment
 
+    # Update scroll position to show active entry on top
+    @scrollToActiveEntry()
+
   setCategoryAndFeed: (category, feed) ->
     return if category is @category and feed is @feed
 
     @category = category
     @feed = feed
+
+    # Unset active entry for clarity
+    @setActiveEntry null
 
     @fetchEntries()
 
@@ -218,9 +224,6 @@ class PaperBox.EntriesView extends Backbone.View
     # and redraws. We better just empty the container and
     # insert all re-rendered elements at once
     @refreshEntries()
-
-    # Update scroll position to show active entry on top
-    @scrollToActiveEntry()
 
   getViewMode: ->
     @viewMode
@@ -252,4 +255,10 @@ class PaperBox.EntriesView extends Backbone.View
     @addEntry(entry)
 
   onRefreshEntries: =>
+    # In case of a refresh caused by a change in
+    # the selected feed, we reset the active entry
+    # to the first entry in the collection
+    if not @activeEntry?
+      @setActiveEntry @entries.at 0
+
     @refreshEntries()
