@@ -1,4 +1,17 @@
 class PaperBox.AppController extends Backbone.Controller
+  routes:
+    'category/:categoryId': 'category'
+    'category/:categoryId/:feedId': 'category'
+
+  category: (categoryId, feedId) ->
+    if categoryId?
+      categoryId = parseInt categoryId, 10
+      @appView.selectCategoryFromId categoryId
+
+    if feedId?
+      feedId = parseInt feedId, 10
+      @appView.selectFeedFromId feedId
+
   setAppView: (appView) ->
     @appView = appView
 
@@ -76,6 +89,12 @@ class PaperBox.AppView extends Backbone.View
 
   setController: (controller) ->
     @controller = controller
+
+  selectCategoryFromId: (categoryId) ->
+    @categoriesView.selectCategoryFromId categoryId
+
+  selectFeedFromId: (feedId) ->
+    @feedsView.selectFeedFromId feedId
 
   onDocumentKeyPress: (event) =>
     handled = false
