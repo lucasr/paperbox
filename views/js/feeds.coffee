@@ -1,6 +1,8 @@
 class PaperBox.Feed extends Backbone.Model
   UNTITLED: 'Untitled'
 
+  url: -> "/api/feed/#{@id}"
+
   initialize: ->
     @set 'name', @UNTITLED if @get("content")?
 
@@ -8,13 +10,13 @@ class PaperBox.Feed extends Backbone.Model
 class PaperBox.Feeds extends Backbone.Collection
   model: PaperBox.Feed
 
+  url: ->
+    null if not @category?
+    "/api/category/#{@category.id}/feeds"
+
   initialize: (models, options) ->
     if 'category' of options
       @setCategory options.category
-
-  url: ->
-    null if not @category?
-    "/api/categories/#{@category.id}/feeds"
 
   comparator: (feed) ->
     feed.get 'name'

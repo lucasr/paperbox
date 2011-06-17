@@ -2,8 +2,11 @@ PaperBox.EntriesViewMode =
     OVERVIEW : 'overview'
     FULL     : 'full'
 
+
 class PaperBox.Entry extends Backbone.Model
   UNTITLED: 'Untitled'
+
+  url: -> "/api/entry/#{@id}"
 
   initialize: ->
     @set 'title', @UNTITLED if @get("content")?
@@ -13,19 +16,18 @@ class PaperBox.Entries extends Backbone.Collection
   model: PaperBox.Entry
 
   url: ->
-    null if not @category? or not @feed?
-    "/api/categories/#{@category.id}/feeds/#{@feed.id}/entries"
+    null if not @feed?
+    "/api/feed/#{@feed.id}/entries"
 
   comparator: (entry) ->
     entry.get 'date'
 
-  setCategoryAndFeed: (category, feed) ->
-    return if category is @category and feed is @feed
+  setFeed: (feed) ->
+    return if feed is @feed
 
-    @category = category
     @feed = feed
 
-    @fetch() if @category? and @feed?
+    @fetch() if @feed?
 
 
 class PaperBox.EntryView extends Backbone.View
@@ -87,7 +89,6 @@ class PaperBox.EntriesView extends Backbone.View
   initialize: ->
     @activeEntry = null
     @viewMode = null
-    @category = null
     @feed = null
 
     @trackScrollPosition()
@@ -96,7 +97,7 @@ class PaperBox.EntriesView extends Backbone.View
     $(window).scroll @onWindowScroll
 
   fetchEntries: ->
-    return if not @category? or not @feed?
+    return if not @feed?
 
     if not @entries?
       @entries = new PaperBox.Entries
@@ -104,7 +105,7 @@ class PaperBox.EntriesView extends Backbone.View
       @entries.bind 'add', @onAddEntry
       @entries.bind 'refresh', @onRefreshEntries
 
-    @entries.setCategoryAndFeed @category, @feed
+    @entries.setFeed @feed
 
   getElementForEntry: (entry) ->
     $("[id=entry-#{entry.id}]")
@@ -187,10 +188,9 @@ class PaperBox.EntriesView extends Backbone.View
     # Update scroll position to show active entry on top
     @scrollToActiveEntry()
 
-  setCategoryAndFeed: (category, feed) ->
-    return if category is @category and feed is @feed
+  setFeed: (feed) ->
+    return if feed is @feed
 
-    @category = category
     @feed = feed
 
     # Unset active entry for clarity

@@ -125,7 +125,7 @@ class PaperBox.AppView extends Backbone.View
     feed = @feedsView.getSelected()
 
     @updateHeaderForFeed feed
-    @entriesView.setCategoryAndFeed category, feed
+    @entriesView.setFeed feed
 
   onViewModeChanged: () =>
     @updateViewMode @entriesView.getViewMode()

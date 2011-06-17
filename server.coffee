@@ -4,63 +4,58 @@ fs = require 'fs'
 
 app = module.exports = express.createServer()
 
-CATEGORIES = [
-  { id: 1,  name: 'Cat 1',  order: 0 }
-  { id: 2,  name: 'Cat 2',  order: 1 }
-  { id: 3,  name: 'Cat 3',  order: 2 }
-  { id: 4,  name: 'Cat 4',  order: 3 }
-  { id: 5,  name: 'Cat 5',  order: 4 }
-  { id: 6,  name: 'Cat 6',  order: 5 }
-  { id: 7,  name: 'Cat 7',  order: 6 }
-  { id: 8,  name: 'Cat 8',  order: 7 }
-  { id: 9,  name: 'Cat 9',  order: 8 }
-  { id: 10, name: 'Cat 10', order: 9 }
-]
+N_CATEGORIES = 10
+N_FEEDS = 10
+N_ENTRIES = 30
 
-feedId = 1
-entryId = 1
+CATEGORIES = {}
+FEEDS = {}
+ENTRIES = {}
 
-for c in CATEGORIES
-  c.feeds = []
+categoryId = feedId = entryId = 1
 
-  for j in [1...11]
-    c.feeds.push
+for c in [0...N_CATEGORIES]
+  category =
+    id: categoryId
+    name: "Cat #{categoryId}"
+    order: c
+    feeds: []
+
+  CATEGORIES[category.id] = category
+
+  categoryId++
+
+  for f in [0...N_FEEDS]
+    feed =
       id: feedId
-      name: "Cat #{c.id}, Feed #{feedId}"
+      name: "Feed #{feedId} (Cat #{category.id})"
+      entries: []
+      categoryId: category.id
+
+    FEEDS[feed.id] = feed
+    category.feeds.push feed
+
     feedId++
 
-  for f in c.feeds
-    f.entries = []
-
-    for i in [1...31]
-      f.entries.push
+    for e in [0...N_ENTRIES]
+      entry =
         id: entryId
-        title: "Entry #{entryId} (Feed #{f.id})"
-        date: Math.floor(Date.now() / 1000) + i
-        body: "<p>
-                 Par 1 no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-               </p>
-               <p>
-                 Par 2 no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-               </p>
-               <p>
-                 Par 3 no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-                 no no no no no no no no no no no no no no no no
-               </p>"
+        title: "Entry #{entryId} (Feed #{feed.id})"
+        date: Math.floor(Date.now() / 1000) + entryId
+        body: ""
+
+      nParagraphs = Math.floor(Math.random() * 4) + 1
+      for p in [1..nParagraphs]
+        entry.body += '<p>'
+
+        nWords = Math.floor(Math.random() * 76) + 20
+        entry.body += 'no ' for w in [0..nWords]
+
+        entry.body += '</p>'
+
+      ENTRIES[entry.id] = entry
+      feed.entries.push entry
+
       entryId++
 
 app.configure ->
@@ -123,118 +118,99 @@ app.get '/', (req, res) ->
 copyNonObjectProperties = (source, target) ->
   target[k] = v for k, v of source when typeof(v) isnt 'object'
 
-loadCategory = (req, res, next, categoryId) ->
-  # The categoryId might be undefined when using
-  # the /categories with no id. Don't do anything
-  # in this case.
-  return next() if categoryId is undefined
+loadCategory = (categoryId) ->
+  category = {}
+  copyNonObjectProperties CATEGORIES[categoryId], category
 
+  category.feeds = []
+  for f in CATEGORIES[categoryId].feeds
+    feed = {}
+
+    copyNonObjectProperties f, feed
+    category.feeds.push feed
+
+  category
+
+handleCategoryId = (req, res, next, categoryId) ->
   id = parseInt categoryId, 10
 
-  found = CATEGORIES.filter (c) -> id is c.id
-
-  if found.length isnt 1
+  if not CATEGORIES[id]?
     return next(new Error('Unable to find category'))
 
-  req.category = {}
-  copyNonObjectProperties found[0], req.category
-
-  req.category.feeds = []
-  for f in found[0].feeds
-    feed = {}
-    copyNonObjectProperties f, feed
-
-    req.category.feeds.push feed
+  req.category = loadCategory id
 
   next()
 
-loadFeed = (req, res, next, feedId) ->
-  # The feedId might be undefined when using
-  # the /categories/:categoryId/feeds with no feed
-  # id. Don't do anything in this case.
-  return next() if feedId is undefined
+loadFeed = (feedId) ->
+  feed = {}
 
+  console.log 'Loading feed ' + FEEDS[feedId].name
+  copyNonObjectProperties FEEDS[feedId], feed
+
+  feed
+
+handleFeedId = (req, res, next, feedId) ->
   id = parseInt feedId, 10
 
-  # Given that the feeds routes depend on categoryId
-  # we should have a category set on request when we
-  # reach this point.
-  found = req.category.feeds.filter (f) -> id is f.id
-
-  if found.length isnt 1
+  if not FEEDS[id]?
     return next(new Error('Unable to find feed'))
 
-  req.feed = {}
-  copyNonObjectProperties found[0], req.feed
+  req.feed = loadFeed id
 
   next()
 
-loadEntry = (req, res, next, entryId) ->
-  # The entryId might be undefined when using
-  # the /categories/:categoryId/feeds/:feedId/entries
-  # with no entry id. Don't do anything in this case.
-  return next() if entryId is undefined
-
+handleEntryId = (req, res, next, entryId) ->
   id = parseInt entryId, 10
 
-  # Given that the entries routes depend on feedId
-  # and categoryId, we should have a category and feed
-  # set on request when we reach this point.
-
-  c = CATEGORIES.filter (c) -> req.category.id is c.id
-  if c.length isnt 1
-    return next(new Error('Unable to find category'))
-
-  f = c[0].feeds.filter (f) -> req.feed.id is f.id
-  if f.length isnt 1
-    return next(new Error('Unable to find feed'))
-
-  found = f[0].entries.filter (p) -> id is p.id
-
-  if found.length isnt 1
+  if not ENTRIES[id]?
     return next(new Error('Unable to find entry'))
 
-  req.entry = found[0]
+  req.entry = ENTRIES[id]
 
   next()
 
-loadEntries = (category, feed) ->
-  c = CATEGORIES.filter (c) -> category.id is c.id
-  throw new Error 'Unable to find category' if c.length is 0
+app.param 'categoryId', handleCategoryId
+app.param 'feedId', handleFeedId
+app.param 'entryId', handleEntryId
 
-  f = c[0].feeds.filter (f) -> feed.id is f.id
-  throw new Error 'Unable to find feed' if f.length is 0
+# Categories
 
-  f[0].entries
+app.get '/api/categories', (req, res) ->
+  categories = []
 
-app.param 'categoryId', loadCategory
-app.param 'feedId', loadFeed
-app.param 'entryId', loadEntry
+  for id, c of CATEGORIES
+    categories.push loadCategory id
 
-app.get '/api/categories/:categoryId?', (req, res) ->
-  if 'category' of req
-    res.send req.category
-  else
-    res.send CATEGORIES
+  res.send categories
 
-app.get '/api/categories/:categoryId/feeds/:feedId?', (req, res) ->
-  if 'feed' of req
-    res.send req.feed
-  else
-    res.send req.category.feeds
+app.get '/api/category/:categoryId', (req, res) ->
+  res.send req.category
 
-app.get '/api/categories/:categoryId/feeds/:feedId/entries/:entryId?', (req, res) ->
-  if 'entry' of req
-    res.send req.entry
-  else
-    res.send loadEntries req.category, req.feed
+app.put '/api/category/:categoryId', (req, res) ->
+  CATEGORIES[req.category.id].name = req.body.name
+  CATEGORIES[req.category.id].order = req.body.order
 
-app.put '/api/categories/:categoryId', (req, res) ->
-  req.category.name = req.body.name
-  req.category.order = req.body.order
+app.get '/api/category/:categoryId/feeds', (req, res) ->
+  res.send req.category.feeds
 
-app.put '/api/categories/:categoryId/feeds/:feedId', (req, res) ->
-  req.feed.name = req.body.name
+# Feeds
+
+app.get '/api/feed/:feedId', (req, res) ->
+  res.send req.feed
+
+app.put '/api/feed/:feedId', (req, res) ->
+  FEEDS[req.feed.id].name = req.body.name
+
+app.get '/api/feed/:feedId/entries', (req, res) ->
+  res.send FEEDS[req.feed.id].entries
+
+# Entries
+
+app.get '/api/entry/:entryId', (req, res) ->
+  res.send req.entry
+
+app.put '/api/entry/:entryId', (req, res) ->
+  ENTRIES[req.entry.id].title = req.body.title
 
 app.listen(3000)
 console.log "PaperBox on port %d", app.address().port
