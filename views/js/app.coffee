@@ -22,7 +22,7 @@ class PaperBox.AppView extends Backbone.View
 
   createEntriesView: ->
     @entriesView = new PaperBox.EntriesView
-    @entriesView.bind 'entry-activate', @onEntryActivate
+    @entriesView.bind 'view-mode-changed', @onViewModeChanged
 
   updateViewMode: (viewMode = PaperBox.EntriesViewMode.OVERVIEW) ->
     @entriesView.setViewMode viewMode
@@ -125,8 +125,8 @@ class PaperBox.AppView extends Backbone.View
     @updateHeaderForFeed feed
     @entriesView.setCategoryAndFeed category, feed
 
-  onEntryActivate: (entry) =>
-    @updateViewMode PaperBox.EntriesViewMode.FULL
+  onViewModeChanged: () =>
+    @updateViewMode @entriesView.getViewMode()
 
   onViewModeOverview: =>
     @updateViewMode PaperBox.EntriesViewMode.OVERVIEW

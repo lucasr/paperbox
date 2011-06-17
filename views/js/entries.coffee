@@ -215,6 +215,8 @@ class PaperBox.EntriesView extends Backbone.View
     # insert all re-rendered elements at once
     @refreshEntries()
 
+    @trigger 'view-mode-changed'
+
   getViewMode: ->
     @viewMode
 
@@ -239,7 +241,7 @@ class PaperBox.EntriesView extends Backbone.View
 
   onEntryActivate: (entry) =>
     @setActiveEntry entry
-    @trigger 'entry-activate', entry
+    @setViewMode PaperBox.EntriesViewMode.FULL
 
   onAddEntry: (entry) =>
     @addEntry(entry)
