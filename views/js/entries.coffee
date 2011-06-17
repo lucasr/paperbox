@@ -102,19 +102,13 @@ class PaperBox.EntriesView extends Backbone.View
   fetchEntries: ->
     return if not @category? or not @feed?
 
-    if @entries?
-      @entries.setCategoryAndFeed @category, @feed
-    else
-      options =
-        category: @category
-        feed: @feed
-
-      @entries = new PaperBox.Entries [], options
+    if not @entries?
+      @entries = new PaperBox.Entries
 
       @entries.bind 'add', @onAddEntry
       @entries.bind 'refresh', @onRefreshEntries
 
-      @entries.fetch()
+    @entries.setCategoryAndFeed @category, @feed
 
   getElementForEntry: (entry) ->
     $("[id=entry-#{entry.id}]")
