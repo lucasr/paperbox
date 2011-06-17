@@ -138,6 +138,8 @@ class PaperBox.AppView extends Backbone.View
     @updateHeaderForFeed feed
     @entriesView.setFeed feed
 
+    @controller.saveLocation "category/#{category.id}/#{feed.id}"
+
   onViewModeChanged: () =>
     @updateViewMode @entriesView.getViewMode()
 
