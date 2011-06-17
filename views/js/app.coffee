@@ -1,3 +1,8 @@
+class PaperBox.AppController extends Backbone.Controller
+  setAppView: (appView) ->
+    @appView = appView
+
+
 class PaperBox.AppView extends Backbone.View
   el: $('body')
 
@@ -68,6 +73,9 @@ class PaperBox.AppView extends Backbone.View
 
   goToNextEntry: ->
     @entriesView.goToNextEntry()
+
+  setController: (controller) ->
+    @controller = controller
 
   onDocumentKeyPress: (event) =>
     handled = false

@@ -18,3 +18,9 @@ require deps, ->
   # All modules are loaded
   $ ->
     Global.appView = new PaperBox.AppView
+    Global.appController = new PaperBox.AppController
+
+    Global.appController.setAppView Global.appView
+    Global.appView.setController Global.appController
+
+    Backbone.history.start()
