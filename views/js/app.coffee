@@ -24,6 +24,8 @@ class PaperBox.AppView extends Backbone.View
     'click #view-mode-full': 'onViewModeFull'
 
   initialize: ->
+    @initialized = false
+
     @createCategoriesView()
     @createFeedsView()
     @createEntriesView()
@@ -157,7 +159,14 @@ class PaperBox.AppView extends Backbone.View
     @updateHeaderForFeed feed
     @entriesView.setFeed feed
 
-    @controller.saveLocation "category/#{category.id}/#{feed.id}"
+    # When feed changes for the first time, this
+    # means the app is fully loaded and ready to
+    # react to any client-side routes
+    if not @initialized
+      Backbone.history.start()
+      @initialized = true
+    else
+      @controller.saveLocation "category/#{category.id}/#{feed.id}"
 
   onViewModeChanged: () =>
     @updateViewMode @entriesView.getViewMode()

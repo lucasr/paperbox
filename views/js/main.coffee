@@ -22,5 +22,3 @@ require deps, ->
 
     Global.appController.setAppView Global.appView
     Global.appView.setController Global.appController
-
-    Backbone.history.start()
