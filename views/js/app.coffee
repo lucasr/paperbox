@@ -25,8 +25,6 @@ class PaperBox.AppView extends Backbone.View
     @entriesView.bind 'view-mode-changed', @onViewModeChanged
 
   updateViewMode: (viewMode = PaperBox.EntriesViewMode.OVERVIEW) ->
-    return if viewMode is @entriesView.getViewMode()
-
     @entriesView.setViewMode viewMode
 
     # Add 'selected' class to the respective mode button
