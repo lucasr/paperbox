@@ -31,7 +31,7 @@ class PaperBox.Entries extends Backbone.Collection
 
 
 class PaperBox.EntryView extends Backbone.View
-  MAX_CHARS: 210
+  MAX_CHARS: 190
   TITLE_MAX_CHARS: 110
 
   events:
