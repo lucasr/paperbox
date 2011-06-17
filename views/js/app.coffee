@@ -103,6 +103,11 @@ class PaperBox.AppView extends Backbone.View
         @goToNextEntry()
         handled = true
 
+      # 'u' returns to overview
+      when 117
+        @updateViewMode PaperBox.EntriesViewMode.OVERVIEW
+        handled = true
+
       # 'v' toggles view modes
       when 118
         @toggleViewMode()
