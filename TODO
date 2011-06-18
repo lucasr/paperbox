@@ -11,3 +11,4 @@
 - Rename view modes to match ui terms
 - Rename EntriesViewMode to simply ViewMode
 - Cleanup stylus files to be more params-based
+- Change 'u' to update current feed when already in overview
