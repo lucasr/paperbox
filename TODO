@@ -8,7 +8,6 @@
 - Fix initial access from client-side route
 - Optimize all css selectors with '>' where possible
 - Next/previous navigation with keyboard on overview
-- Rename view modes to match ui terms
 - Rename EntriesViewMode to simply ViewMode
 - Cleanup stylus files to be more params-based
 - Change 'u' to update current feed when already in overview

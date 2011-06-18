@@ -20,8 +20,8 @@ class PaperBox.AppView extends Backbone.View
   el: $('body')
 
   events:
-    'click #view-mode-overview': 'onViewModeOverview'
-    'click #view-mode-full': 'onViewModeFull'
+    'click #view-mode-summary': 'onViewModeSummary'
+    'click #view-mode-articles': 'onViewModeArticles'
 
   initialize: ->
     @initialized = false
@@ -44,7 +44,7 @@ class PaperBox.AppView extends Backbone.View
     @entriesView = new PaperBox.EntriesView
     @entriesView.bind 'view-mode-changed', @onViewModeChanged
 
-  updateViewMode: (viewMode = PaperBox.EntriesViewMode.OVERVIEW) ->
+  updateViewMode: (viewMode = PaperBox.EntriesViewMode.SUMMARY) ->
     @entriesView.setViewMode viewMode
 
     # Add 'selected' class to the respective mode button
@@ -64,10 +64,10 @@ class PaperBox.AppView extends Backbone.View
     $('#feed-title').text feed.get 'name'
 
   toggleViewMode: ->
-    if @entriesView.getViewMode() is PaperBox.EntriesViewMode.FULL
-      viewMode = PaperBox.EntriesViewMode.OVERVIEW
+    if @entriesView.getViewMode() is PaperBox.EntriesViewMode.ARTICLES
+      viewMode = PaperBox.EntriesViewMode.SUMMARY
     else
-      viewMode = PaperBox.EntriesViewMode.FULL
+      viewMode = PaperBox.EntriesViewMode.ARTICLES
 
     @updateViewMode viewMode
 
@@ -132,9 +132,9 @@ class PaperBox.AppView extends Backbone.View
         @goToNextEntry()
         handled = true
 
-      # 'u' returns to overview
+      # 'u' returns to summary
       when 117
-        @updateViewMode PaperBox.EntriesViewMode.OVERVIEW
+        @updateViewMode PaperBox.EntriesViewMode.SUMMARY
         handled = true
 
       # 'v' toggles view modes
@@ -171,8 +171,8 @@ class PaperBox.AppView extends Backbone.View
   onViewModeChanged: () =>
     @updateViewMode @entriesView.getViewMode()
 
-  onViewModeOverview: =>
-    @updateViewMode PaperBox.EntriesViewMode.OVERVIEW
+  onViewModeSummary: =>
+    @updateViewMode PaperBox.EntriesViewMode.SUMMARY
 
-  onViewModeFull: =>
-    @updateViewMode PaperBox.EntriesViewMode.FULL
+  onViewModeArticles: =>
+    @updateViewMode PaperBox.EntriesViewMode.ARTICLES
