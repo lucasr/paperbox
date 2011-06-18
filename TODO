@@ -1,2 +1,12 @@
 - Prefix private methods with '_'
-- scrollToEntry in EntriesView
+- Reorder methods in classes to have public methods last
+- Split templates for overview and full view
+- Factor out methods to render overview and full modes in EntryView
+- Show date and feed info on each entry
+- Implement 'all feeds' feed
+- Trigger feed selection in AppView instead of EntriesView
+- Fix initial access from client-side route
+- Optimize all css selectors with '>' where possible
+- Next/previous navigation with keyboard on overview
+- Rename view modes to match ui terms
+- Rename EntriesViewMode to simply ViewMode
