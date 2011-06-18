@@ -27,6 +27,8 @@ class PaperBox.Categories extends Backbone.Collection
 class PaperBox.CategoryView extends Backbone.View
   tagName: 'li'
 
+  template: _.template $('#category-template').html()
+
   events:
     'click': 'onClick'
 
@@ -34,13 +36,12 @@ class PaperBox.CategoryView extends Backbone.View
     @model.bind 'change', @render
 
   render: =>
-    $(@el).text @model.get 'name'
+    $(@el).html @template()
     $(@el).attr 'id', 'category-' + @model.get 'id'
     $(@el).data 'category-order', @model.get 'order'
 
-    # FIXME: Should move the construction of CategoryView
-    # to a separate template hidden element
-    $(@el).append '<div class="handle"/>'
+    @$('.title').text @model.get 'name'
+
     @
 
   onClick: =>
