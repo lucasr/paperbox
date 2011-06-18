@@ -1,4 +1,4 @@
-PaperBox.EntriesViewMode =
+PaperBox.ViewMode =
     SUMMARY  : 'summary'
     ARTICLES : 'articles'
 
@@ -53,7 +53,7 @@ class PaperBox.EntryView extends Backbone.View
     title = @model.get 'title'
     body = @model.get 'body'
 
-    if @viewMode is PaperBox.EntriesViewMode.SUMMARY
+    if @viewMode is PaperBox.ViewMode.SUMMARY
       # Truncate and ellipsize title text if necessary
       # We allow a maximum of TITLE_MAX_CHARS chars in
       # the title
@@ -80,7 +80,7 @@ class PaperBox.EntryView extends Backbone.View
     @
 
   onClick: =>
-    if @viewMode is PaperBox.EntriesViewMode.SUMMARY
+    if @viewMode is PaperBox.ViewMode.SUMMARY
       @trigger 'activate', @model
 
 class PaperBox.EntriesView extends Backbone.View
@@ -221,7 +221,7 @@ class PaperBox.EntriesView extends Backbone.View
     @viewMode
 
   goToPreviousEntry: ->
-    return if @viewMode is PaperBox.EntriesViewMode.SUMMARY
+    return if @viewMode is PaperBox.ViewMode.SUMMARY
     index = @entries.indexOf @activeEntry
 
     if index - 1 >= 0
@@ -229,7 +229,7 @@ class PaperBox.EntriesView extends Backbone.View
       @scrollToActiveEntry()
 
   goToNextEntry: ->
-    return if @viewMode is PaperBox.EntriesViewMode.SUMMARY
+    return if @viewMode is PaperBox.ViewMode.SUMMARY
     index = @entries.indexOf @activeEntry
 
     if index + 1 < @entries.size()
@@ -241,7 +241,7 @@ class PaperBox.EntriesView extends Backbone.View
 
   onEntryActivate: (entry) =>
     @setActiveEntry entry
-    @setViewMode PaperBox.EntriesViewMode.ARTICLES
+    @setViewMode PaperBox.ViewMode.ARTICLES
 
   onAddEntry: (entry) =>
     @addEntry(entry)

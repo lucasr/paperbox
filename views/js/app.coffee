@@ -44,11 +44,11 @@ class PaperBox.AppView extends Backbone.View
     @entriesView = new PaperBox.EntriesView
     @entriesView.bind 'view-mode-changed', @onViewModeChanged
 
-  updateViewMode: (viewMode = PaperBox.EntriesViewMode.SUMMARY) ->
+  updateViewMode: (viewMode = PaperBox.ViewMode.SUMMARY) ->
     @entriesView.setViewMode viewMode
 
     # Add 'selected' class to the respective mode button
-    for viewId, aViewMode of PaperBox.EntriesViewMode
+    for viewId, aViewMode of PaperBox.ViewMode
       if aViewMode is viewMode
         $("#view-mode-#{aViewMode}").addClass 'selected'
       else
@@ -64,10 +64,10 @@ class PaperBox.AppView extends Backbone.View
     $('#feed-title').text feed.get 'name'
 
   toggleViewMode: ->
-    if @entriesView.getViewMode() is PaperBox.EntriesViewMode.ARTICLES
-      viewMode = PaperBox.EntriesViewMode.SUMMARY
+    if @entriesView.getViewMode() is PaperBox.ViewMode.ARTICLES
+      viewMode = PaperBox.ViewMode.SUMMARY
     else
-      viewMode = PaperBox.EntriesViewMode.ARTICLES
+      viewMode = PaperBox.ViewMode.ARTICLES
 
     @updateViewMode viewMode
 
@@ -134,7 +134,7 @@ class PaperBox.AppView extends Backbone.View
 
       # 'u' returns to summary
       when 117
-        @updateViewMode PaperBox.EntriesViewMode.SUMMARY
+        @updateViewMode PaperBox.ViewMode.SUMMARY
         handled = true
 
       # 'v' toggles view modes
@@ -172,7 +172,7 @@ class PaperBox.AppView extends Backbone.View
     @updateViewMode @entriesView.getViewMode()
 
   onViewModeSummary: =>
-    @updateViewMode PaperBox.EntriesViewMode.SUMMARY
+    @updateViewMode PaperBox.ViewMode.SUMMARY
 
   onViewModeArticles: =>
-    @updateViewMode PaperBox.EntriesViewMode.ARTICLES
+    @updateViewMode PaperBox.ViewMode.ARTICLES
