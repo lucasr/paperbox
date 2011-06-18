@@ -10,3 +10,4 @@
 - Next/previous navigation with keyboard on overview
 - Rename view modes to match ui terms
 - Rename EntriesViewMode to simply ViewMode
+- Cleanup stylus files to be more params-based
