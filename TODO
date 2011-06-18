@@ -1,7 +1,5 @@
 - Prefix private methods with '_'
 - Reorder methods in classes to have public methods last
-- Split templates for overview and full view
-- Factor out methods to render overview and full modes in EntryView
 - Show date and feed info on each entry
 - Implement 'all feeds' feed
 - Trigger feed selection in AppView instead of EntriesView

@@ -39,43 +39,47 @@ class PaperBox.EntryView extends Backbone.View
 
   tagName: 'div'
 
-  template: _.template $('#entry-template').html()
+  summaryTemplate: _.template $('#summary-entry-template').html()
+  articlesTemplate: _.template $('#articles-entry-template').html()
 
   initialize: (options) ->
     @viewMode = options.viewMode
     @model.bind 'change', @render
 
-  render: =>
-    $(@el).html @template()
-    $(@el).addClass 'entry'
-    $(@el).attr 'id', 'entry-' + @model.get 'id'
+  renderForSummaryMode: ->
+    $(@el).html @summaryTemplate()
 
     title = @model.get 'title'
     body = @model.get 'body'
 
-    if @viewMode is PaperBox.ViewMode.SUMMARY
-      # Truncate and ellipsize title text if necessary
-      # We allow a maximum of TITLE_MAX_CHARS chars in
-      # the title
-      if title.length > @TITLE_MAX_CHARS
-        title = title.substring(0, @TITLE_MAX_CHARS - 3) + "..."
+    # Truncate and ellipsize title text if necessary
+    # We allow a maximum of TITLE_MAX_CHARS chars in
+    # the title
+    if title.length > @TITLE_MAX_CHARS
+      title = title.substring(0, @TITLE_MAX_CHARS - 3) + "..."
 
-      # Strip all HTML tags from body text
-      body = body.replace /(<([^>]+)>)/ig, ''
+    # Strip all HTML tags from body text
+    body = body.replace /(<([^>]+)>)/ig, ''
 
-      # Truncate and ellipsize body text if necessary
-      if body.length > @MAX_CHARS - title.length
-        body = body.substring(0, @MAX_CHARS - title.length - 1) + "..."
+    # Truncate and ellipsize body text if necessary
+    if body.length > @MAX_CHARS - title.length
+      body = body.substring(0, @MAX_CHARS - title.length - 1) + "..."
 
-      # The whole entry content is set inside the title
-      # h1 tag for simplicity
-      @$('.title h1').html "<b>#{title}</b> #{body}"
+    @$('.body').html "<b>#{title}</b> #{body}"
 
-      # The #content element is not used so we remove it
-      @$('.content').remove()
-    else
-      @$('.title h1').text title
-      @$('.content').html body
+  renderForArticlesMode: ->
+    $(@el).html @articlesTemplate()
+
+    @$('.title h1').text @model.get 'title'
+    @$('.body').html @model.get 'body'
+
+  render: =>
+    switch @viewMode
+      when PaperBox.ViewMode.SUMMARY then @renderForSummaryMode()
+      when PaperBox.ViewMode.ARTICLES then @renderForArticlesMode()
+
+    $(@el).addClass 'entry'
+    $(@el).attr 'id', 'entry-' + @model.get 'id'
 
     @
 
