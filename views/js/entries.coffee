@@ -46,6 +46,30 @@ class PaperBox.EntryView extends Backbone.View
     @viewMode = options.viewMode
     @model.bind 'change', @render
 
+  formatDate: (date) ->
+    monthNames = [
+      "January"
+      "February"
+      "March"
+      "April"
+      "May"
+      "June"
+      "July"
+      "August"
+      "September"
+      "October"
+      "November"
+      "December"
+    ]
+
+    entryDate = new Date date
+
+    day = entryDate.getDate()
+    month = monthNames[entryDate.getMonth()]
+    year = entryDate.getFullYear()
+
+    "#{month} #{day}, #{year}"
+
   renderForSummaryMode: ->
     $(@el).html @summaryTemplate()
 
@@ -65,12 +89,16 @@ class PaperBox.EntryView extends Backbone.View
     if body.length > @MAX_CHARS - title.length
       body = body.substring(0, @MAX_CHARS - title.length - 1) + "..."
 
+    @$('.info .date').text @formatDate @model.get 'date'
+    @$('.info .feed').text @model.get 'feed'
     @$('.body').html "<b>#{title}</b> #{body}"
 
   renderForArticlesMode: ->
     $(@el).html @articlesTemplate()
 
     @$('.title h1').text @model.get 'title'
+    @$('.title .date').text @formatDate @model.get 'date'
+    @$('.title .feed').text @model.get 'feed'
     @$('.body').html @model.get 'body'
 
   render: =>

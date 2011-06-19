@@ -242,13 +242,28 @@ ul.side-menu li:hover .handle:hover
 #content.articles > .entry:last-child
   padding-bottom 40px
 
+#content.articles > .entry .title
+  margin-bottom 30px
+
 #content.articles > .entry .title h1
   font-size 22px
   margin 0px
-  margin-bottom 2px
+  margin-bottom 5px
   padding 0px
   display block
   border-bottom 2px solid #DDD
+  clear both
+
+#content.articles > .entry .title .date
+  font-size 12px
+  color #444
+  text-transform uppercase
+  float left
+
+#content.articles > .entry .title .feed
+  font-size 12px
+  color #444
+  float right
 
 #content.articles > .entry .body
   clear both
@@ -268,7 +283,7 @@ ul.side-menu li:hover .handle:hover
   padding 10px
   float left
   width 260px
-  height 90px
+  height 105px
   overflow hidden
 
 #content.summary > .entry:hover
@@ -289,3 +304,17 @@ ul.side-menu li:hover .handle:hover
 
 #content.summary > .entry .body b
   color black
+
+#content.summary > .entry .info
+  font-size 11px
+  float left
+  color #444
+  width 100%
+  margin-bottom 5px
+
+#content.summary > .entry .info .date
+  text-transform uppercase
+  float left
+
+#content.summary > .entry .info .feed
+  float right

@@ -41,8 +41,9 @@ for c in [0...N_CATEGORIES]
       entry =
         id: entryId
         title: "Entry #{entryId} (Feed #{feed.id})"
-        date: Math.floor(Date.now() / 1000) + entryId
+        date: Date.now() - (86400000 * e)
         body: ""
+        feed: feed.name
 
       nParagraphs = Math.floor(Math.random() * 4) + 1
       for p in [1..nParagraphs]
