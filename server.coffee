@@ -213,5 +213,13 @@ app.get '/api/entry/:entryId', (req, res) ->
 app.put '/api/entry/:entryId', (req, res) ->
   ENTRIES[req.entry.id].title = req.body.title
 
+# Actions
+
+app.post '/api/refresh/:feedId', (req, res) ->
+  console.log "Refresh called on feed #{req.feed.id}"
+
+app.post '/api/read/:feedId', (req, res) ->
+  console.log "Mark as Read called on feed #{req.feed.id}"
+
 app.listen(3000)
 console.log "PaperBox on port %d", app.address().port
