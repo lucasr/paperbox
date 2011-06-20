@@ -12,6 +12,8 @@ CATEGORIES = {}
 FEEDS = {}
 ENTRIES = {}
 
+ALL_FEEDS_ID_PATTERN = /all-(.+)/
+
 categoryId = feedId = entryId = 1
 
 for c in [0...N_CATEGORIES]
@@ -151,6 +153,13 @@ loadFeed = (feedId) ->
   feed
 
 handleFeedId = (req, res, next, feedId) ->
+  if feedId.match ALL_FEEDS_ID_PATTERN
+    req.feed =
+      id: feedId
+      name: 'All Feeds'
+
+    return next()
+
   id = parseInt feedId, 10
 
   if not FEEDS[id]?
@@ -203,7 +212,20 @@ app.put '/api/feed/:feedId', (req, res) ->
   FEEDS[req.feed.id].name = req.body.name
 
 app.get '/api/feed/:feedId/entries', (req, res) ->
-  res.send FEEDS[req.feed.id].entries
+  matches = "#{req.feed.id}".match ALL_FEEDS_ID_PATTERN
+  if matches?
+    categoryId = parseInt matches[1], 10
+
+    entries = []
+    for feed in CATEGORIES[categoryId].feeds
+      entries = entries.concat feed.entries
+
+    console.log "#### #{categoryId} entries #{entries.length}"
+  else
+    entries = FEEDS[req.feed.id].entries
+
+  res.send entries
+
 
 # Entries
 
