@@ -10,3 +10,10 @@ Stylesheets:
 Views:
 - Avoid re-creating all EntryViews on view mode changes
 - Prettier routes for all feeds in each category (#category/3/all)
+- Implement "extra tools" slide-in bar
+- Implement progress indicator
+- Investigate bootstrapping categories and feeds with an in-page json
+  instead of the extra ajax call
+
+Server:
+- Implement mock auth infra
