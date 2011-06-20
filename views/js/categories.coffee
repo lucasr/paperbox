@@ -5,7 +5,7 @@ class PaperBox.Category extends Backbone.Model
 
   initialize: ->
     @set 'name', @UNTITLED if @get("content")?
-    @feeds = new PaperBox.Feeds @get 'feeds', category: @
+    @feeds = new PaperBox.Feeds @get('feeds'), category: @
 
   getFeeds: ->
     @feeds
