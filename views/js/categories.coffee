@@ -4,7 +4,7 @@ class PaperBox.Category extends Backbone.Model
   url: -> "/api/category/#{@id}"
 
   initialize: ->
-    @set 'name', @UNTITLED if @get("content")?
+    @set 'name', @UNTITLED if not @get('name')?
     @feeds = new PaperBox.Feeds @get('feeds'), category: @
 
   getFeeds: ->

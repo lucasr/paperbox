@@ -9,7 +9,7 @@ class PaperBox.Entry extends Backbone.Model
   url: -> "/api/entry/#{@id}"
 
   initialize: ->
-    @set 'title', @UNTITLED if @get("content")?
+    @set 'title', @UNTITLED if not @get('title')?
 
 
 class PaperBox.Entries extends Backbone.Collection

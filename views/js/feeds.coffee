@@ -4,7 +4,7 @@ class PaperBox.Feed extends Backbone.Model
   url: -> "/api/feed/#{@id}"
 
   initialize: ->
-    @set 'name', @UNTITLED if @get("content")?
+    @set 'name', @UNTITLED if not @get('name')?
 
 
 class PaperBox.Feeds extends Backbone.Collection
