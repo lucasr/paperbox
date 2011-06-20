@@ -41,6 +41,7 @@ class PaperBox.AppView extends Backbone.View
   createCategoriesView: ->
     @categoriesView = new PaperBox.CategoriesView
     @categoriesView.bind 'selected-changed', @onCategoryChanged
+    @categoriesView.bind 'state-changed', @onCategoriesViewStateChanged
 
   createFeedsView: ->
     @feedsView = new PaperBox.FeedsView
@@ -68,6 +69,36 @@ class PaperBox.AppView extends Backbone.View
 
   updateHeaderForFeed: (feed) ->
     $('#feed-title').text feed.get 'name'
+
+  maybeInitSelection: ->
+    return if @initialized
+
+    # This will handle any pending client-side routes on
+    # startup. If a route is activated by the initial fragment
+    # categoryIdToSelect and feedIdToSelect might be set.
+    # If no fragment is used, we simply select the first
+    # category and feed from the list.
+    Backbone.history.start()
+
+    @initialized = true
+
+    if @categoryIdToSelect?
+      @categoriesView.selectCategoryFromId @categoryIdToSelect
+      delete @categoryIdToSelect
+    else
+      @categoriesView.selectCategoryFromIndex 0
+
+    if @feedIdToSelect?
+      @feedsView.selectFeedFromId @feedIdToSelect
+      delete @feedIdToSelect
+    else
+      @feedsView.selectFeedFromIndex 0
+
+  updateFromState: ->
+    state = @categoriesView.getState()
+
+    if state is PaperBox.ViewState.READY
+      @maybeInitSelection()
 
   toggleViewMode: ->
     if @entriesView.getViewMode() is PaperBox.ViewMode.ARTICLES
@@ -99,10 +130,16 @@ class PaperBox.AppView extends Backbone.View
     @controller = controller
 
   selectCategoryFromId: (categoryId) ->
-    @categoriesView.selectCategoryFromId categoryId
+    if @initialized
+      @categoriesView.selectCategoryFromId categoryId
+    else
+      @categoryIdToSelect = categoryId
 
   selectFeedFromId: (feedId) ->
-    @feedsView.selectFeedFromId feedId
+    if @initialized
+      @feedsView.selectFeedFromId feedId
+    else
+      @feedIdToSelect = feedId
 
   onDocumentKeyPress: (event) =>
     handled = false
@@ -158,6 +195,15 @@ class PaperBox.AppView extends Backbone.View
     @updateHeaderForCategory category
     @feedsView.setCategory category
 
+    # FIXME: This will select the first feed on the
+    # list when a new category is selected. It should
+    # default to the 'All feeds' item which is not
+    # implemented yet
+    @feedsView.selectFeedFromIndex 0
+
+  onCategoriesViewStateChanged: =>
+    @updateFromState()
+
   onFeedChanged: =>
     category = @categoriesView.getSelected()
     feed = @feedsView.getSelected()
@@ -165,14 +211,7 @@ class PaperBox.AppView extends Backbone.View
     @updateHeaderForFeed feed
     @entriesView.setFeed feed
 
-    # When feed changes for the first time, this
-    # means the app is fully loaded and ready to
-    # react to any client-side routes
-    if not @initialized
-      Backbone.history.start()
-      @initialized = true
-    else
-      @controller.saveLocation "category/#{category.id}/#{feed.id}"
+    @controller.saveLocation "category/#{category.id}/#{feed.id}"
 
   onViewModeChanged: () =>
     @updateViewMode @entriesView.getViewMode()

@@ -82,10 +82,6 @@ class PaperBox.FeedsView extends Backbone.View
 
     $(@el).append docFragment
 
-    # We automatically fetch the first category
-    # on full refresh
-    @updateSelected feeds.at 0
-
   updateSelected: (selected) ->
     return if selected is @selected
 
