@@ -28,6 +28,8 @@ class PaperBox.AppView extends Backbone.View
   events:
     'click #view-mode-summary': 'onViewModeSummary'
     'click #view-mode-articles': 'onViewModeArticles'
+    'click #tools-refresh-button': 'onRefreshClicked'
+    'click #tools-read-button': 'onMarkAsReadClicked'
 
   initialize: ->
     @initialized = false
@@ -60,6 +62,14 @@ class PaperBox.AppView extends Backbone.View
         $("#view-mode-#{aViewMode}").addClass 'selected'
       else
         $("#view-mode-#{aViewMode}").removeClass 'selected'
+
+  refreshFeed: ->
+    feed = @feedsView.getSelected()
+    $.post "/api/refresh/#{feed.id}", {}
+
+  markFeedAsRead: ->
+    feed = @feedsView.getSelected()
+    $.post "/api/read/#{feed.id}", {}
 
   setupGlobalShortcuts: ->
     $(document).keypress @onDocumentKeyPress
@@ -221,3 +231,9 @@ class PaperBox.AppView extends Backbone.View
 
   onViewModeArticles: =>
     @updateViewMode PaperBox.ViewMode.ARTICLES
+
+  onRefreshClicked: =>
+    @refreshFeed()
+
+  onMarkAsReadClicked: =>
+    @markFeedAsRead()
