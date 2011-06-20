@@ -253,7 +253,6 @@ class PaperBox.EntriesView extends Backbone.View
     @viewMode
 
   goToPreviousEntry: ->
-    return if @viewMode is PaperBox.ViewMode.SUMMARY
     index = @entries.indexOf @activeEntry
 
     if index - 1 >= 0
@@ -261,7 +260,6 @@ class PaperBox.EntriesView extends Backbone.View
       @scrollToActiveEntry()
 
   goToNextEntry: ->
-    return if @viewMode is PaperBox.ViewMode.SUMMARY
     index = @entries.indexOf @activeEntry
 
     if index + 1 < @entries.size()
