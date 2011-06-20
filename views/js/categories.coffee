@@ -51,12 +51,15 @@ class PaperBox.CategoriesView extends Backbone.View
   el: $('#categories-menu')
 
   initialize: ->
+    @state = PaperBox.ViewState.IDLE
     @selected = null
 
     @fetchCategories()
     @makeSortable()
 
   fetchCategories: ->
+    @setState PaperBox.ViewState.LOADING
+
     @categories = new PaperBox.Categories
 
     @categories.bind 'add', @onAddCategory
@@ -118,6 +121,16 @@ class PaperBox.CategoriesView extends Backbone.View
 
     @trigger 'selected-changed'
 
+  setState: (state) ->
+    return if state is @state
+
+    @state = state
+
+    @trigger 'state-changed'
+
+  getState: ->
+    @state
+
   goToPreviousCategory: ->
     index = @categories.indexOf @selected
 
@@ -148,6 +161,7 @@ class PaperBox.CategoriesView extends Backbone.View
 
   onRefreshCategories: =>
     @refreshCategories()
+    @setState PaperBox.ViewState.READY
 
   onDraggingStop: (event, ui) =>
     newOrder = $(ui.item).index()
