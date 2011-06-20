@@ -1,3 +1,9 @@
+PaperBox.ViewState =
+  IDLE    : 0
+  LOADING : 1
+  READY   : 2
+
+
 class PaperBox.AppController extends Backbone.Controller
   routes:
     'category/:categoryId': 'category'
