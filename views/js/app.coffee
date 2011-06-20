@@ -185,6 +185,13 @@ class PaperBox.AppView extends Backbone.View
         @goToNextEntry()
         handled = true
 
+      # 'o' views active entry on articles mode
+      when 111
+        if @entriesView.getViewMode() is PaperBox.ViewMode.SUMMARY
+          @updateViewMode PaperBox.ViewMode.ARTICLES
+
+        handled = true
+
       # 'u' returns to summary
       when 117
         if @entriesView.getViewMode() is PaperBox.ViewMode.ARTICLES
