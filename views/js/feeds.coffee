@@ -48,6 +48,7 @@ class PaperBox.FeedsView extends Backbone.View
   el: $('#feeds-menu')
 
   initialize: ->
+    @state = PaperBox.ViewState.IDLE
     @category = null
     @selected = null
 
@@ -100,6 +101,16 @@ class PaperBox.FeedsView extends Backbone.View
 
     @trigger 'selected-changed'
 
+  setState: (state) ->
+    return if state is @state
+
+    @state = state
+
+    @trigger 'state-changed'
+
+  getState: ->
+    @state
+
   getSelected: ->
     @selected
 
@@ -132,6 +143,8 @@ class PaperBox.FeedsView extends Backbone.View
   setCategory: (category) ->
     return if category is @category
 
+    @setState PaperBox.ViewState.LOADING
+
     if @category?
       feeds = @category.getFeeds()
       feeds.unbind 'add', @onAddFeed
@@ -145,6 +158,7 @@ class PaperBox.FeedsView extends Backbone.View
       feeds.bind 'refresh', @onRefreshFeeds
 
     @refreshFeeds()
+    @setState PaperBox.ViewState.READY
 
   getElementForFeed: (feed) ->
     $("li[id=feed-#{feed.id}]")
