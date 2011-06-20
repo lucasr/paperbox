@@ -1,8 +1,6 @@
 - Prefix private methods with '_'
 - Reorder methods in classes to have public methods last
 - Implement 'all feeds' feed
-- Trigger feed selection in AppView instead of EntriesView
-- Fix initial access from client-side route
 - Optimize all css selectors with '>' where possible
 - Next/previous navigation with keyboard on overview
 - Cleanup stylus files to be more params-based
