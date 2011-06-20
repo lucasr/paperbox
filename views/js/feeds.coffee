@@ -11,7 +11,7 @@ class PaperBox.Feeds extends Backbone.Collection
   model: PaperBox.Feed
 
   url: ->
-    null if not @category?
+    return null if not @category?
     "/api/category/#{@category.id}/feeds"
 
   initialize: (models, options) ->
