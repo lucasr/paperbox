@@ -25,6 +25,18 @@ class PaperBox.Feeds extends Backbone.Collection
     return if category is @category
     @category = category
 
+  getCategoryFeed: ->
+    return null if not @category?
+
+    if not @categoryFeed?
+      attributes =
+        id: "all-#{@category.id}"
+        name: 'All Feeds'
+
+      @categoryFeed = new PaperBox.Feed attributes
+
+    @categoryFeed
+
 
 class PaperBox.FeedView extends Backbone.View
   tagName: 'li'
