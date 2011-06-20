@@ -102,7 +102,7 @@ class PaperBox.AppView extends Backbone.View
       @feedsView.selectFeedFromId @feedIdToSelect
       delete @feedIdToSelect
     else
-      @feedsView.selectFeedFromIndex 0
+      @feedsView.selectCategoryFeed()
 
   updateFromState: ->
     state = @categoriesView.getState()
@@ -209,11 +209,7 @@ class PaperBox.AppView extends Backbone.View
     @updateHeaderForCategory category
     @feedsView.setCategory category
 
-    # FIXME: This will select the first feed on the
-    # list when a new category is selected. It should
-    # default to the 'All feeds' item which is not
-    # implemented yet
-    @feedsView.selectFeedFromIndex 0
+    @feedsView.selectCategoryFeed()
 
   onCategoriesViewStateChanged: =>
     @updateFromState()

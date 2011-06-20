@@ -85,6 +85,10 @@ class PaperBox.FeedsView extends Backbone.View
 
     docFragment = document.createDocumentFragment()
 
+    # Add 'All Feeds' entry first
+    view = @createFeedView feeds.getCategoryFeed()
+    docFragment.appendChild view.render().el
+
     # Append each feed to a document
     # docFragmentment instead of adding each one directly
     # to the document, for better performance
