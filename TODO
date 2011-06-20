@@ -2,7 +2,6 @@
 - Reorder methods in classes to have public methods last
 - Optimize all css selectors with '>' where possible
 - Split css into separate files where possible
-- Next/previous navigation with keyboard on overview
 - Cleanup stylus files to be more params-based
 - Avoid re-creating all EntryViews on view mode changes
 - Prettier routes for all feeds in each category (#category/3/all)
