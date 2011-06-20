@@ -187,7 +187,11 @@ class PaperBox.AppView extends Backbone.View
 
       # 'u' returns to summary
       when 117
-        @updateViewMode PaperBox.ViewMode.SUMMARY
+        if @entriesView.getViewMode() is PaperBox.ViewMode.ARTICLES
+          @updateViewMode PaperBox.ViewMode.SUMMARY
+        else
+          @refreshFeed()
+
         handled = true
 
       # 'v' toggles view modes

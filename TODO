@@ -4,5 +4,4 @@
 - Optimize all css selectors with '>' where possible
 - Next/previous navigation with keyboard on overview
 - Cleanup stylus files to be more params-based
-- Change 'u' to update current feed when already in overview
 - Avoid re-creating all EntryViews on view mode changes
