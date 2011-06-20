@@ -1,8 +1,13 @@
+Code quality:
 - Prefix private methods with '_'
 - Reorder methods in classes to have public methods last
+
+Stylesheets:
 - Optimize all css selectors with '>' where possible
 - Split css into separate files where possible
 - Cleanup stylus files to be more params-based
+
+Views:
 - Avoid re-creating all EntryViews on view mode changes
 - Prettier routes for all feeds in each category (#category/3/all)
 - Fix initialize method in categories, feeds and entries
