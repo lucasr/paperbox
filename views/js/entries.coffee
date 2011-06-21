@@ -220,6 +220,10 @@ class PaperBox.EntriesView extends Backbone.View
     # Update scroll position to show active entry on top
     @scrollToActiveEntry()
 
+  selectEntryFromIndex: (index) ->
+    @setActiveEntry @entries.at index
+    @scrollToActiveEntry()
+
   setFeed: (feed) ->
     return if feed is @feed
 
@@ -256,15 +260,13 @@ class PaperBox.EntriesView extends Backbone.View
     index = @entries.indexOf @activeEntry
 
     if index - 1 >= 0
-      @setActiveEntry @entries.at index - 1
-      @scrollToActiveEntry()
+      @selectEntryFromIndex index - 1
 
   goToNextEntry: ->
     index = @entries.indexOf @activeEntry
 
     if index + 1 < @entries.size()
-      @setActiveEntry @entries.at index + 1
-      @scrollToActiveEntry()
+      @selectEntryFromIndex index + 1
 
   onWindowScroll: =>
     @updateActiveEntryFromScroll()
