@@ -222,7 +222,7 @@ class PaperBox.EntriesView extends Backbone.View
   selectEntryFromIndex: (index) ->
     @setActiveEntry @entries.at index
 
-    scrollToActive = false
+    shouldScroll = false
 
     switch @viewMode
       when PaperBox.ViewMode.SUMMARY
@@ -237,12 +237,12 @@ class PaperBox.EntriesView extends Backbone.View
         bottom = top + $(el).height()
 
         if top < scrollTop or bottom > scrollBottom
-          scrollToActive = true
+          shouldScroll = true
 
       when PaperBox.ViewMode.ARTICLES
-        scrollToActive = true
+        shouldScroll = true
 
-    @scrollToActiveEntry() if scrollToActive
+    @scrollToActiveEntry() if shouldScroll
 
   setFeed: (feed) ->
     return if feed is @feed
