@@ -123,6 +123,10 @@ class PaperBox.EntriesView extends Backbone.View
     @viewMode = null
     @feed = null
 
+    @scroll =
+      headerHeight: $('#header').height()
+
+    @updateScroll()
     @trackScrollPosition()
 
   trackScrollPosition: ->
@@ -162,29 +166,17 @@ class PaperBox.EntriesView extends Backbone.View
     # FIXME: This is highly inefficient. We should come up
     # with a better way to update active entry from scroll
 
-    scrollTop = $(window).scrollTop()
-    windowHeight = $(window).height()
-    headerHeight = $('#header').height()
-
     $(@el).children().each (index, el) =>
-      top = $(el).offset().top - headerHeight
+      position = @getElementPosition el
 
-      if scrollTop <= top <= scrollTop + windowHeight
+      if @scroll.top <= position.top <= @scroll.bottom
         @setActiveEntry @entries.at index
         false
-
-  getEntryViewScrollTop: (entry) ->
-    return if not entry?
-
-    # We have to compensate the header height when setting
-    # the scroll top as the #content div is offset by its
-    # height
-    $("#entry-#{entry.id}").offset().top - $('#header').height()
 
   scrollToActiveEntry: ->
     return if not @activeEntry?
 
-    $(window).scrollTop @getEntryViewScrollTop @activeEntry
+    $(window).scrollTop @getEntryPosition(@activeEntry).top
 
   createEntryView: (entry) ->
     view = new PaperBox.EntryView model: entry, viewMode: @viewMode
@@ -219,28 +211,33 @@ class PaperBox.EntriesView extends Backbone.View
     # Update scroll position to show active entry on top
     @scrollToActiveEntry()
 
+  updateScroll: ->
+    @scroll.windowHeight = $(window).height() - @scroll.headerHeight
+    @scroll.top = $(window).scrollTop()
+    @scroll.bottom = @scroll.top + @scroll.windowHeight
+
+  getElementPosition: (el) ->
+    position = {}
+
+    position.top = $(el).offset().top - @scroll.headerHeight
+    position.bottom = position.top + $(el).height()
+
+    position
+
+  getEntryPosition: (entry) ->
+    el = @getElementForEntry entry
+    @getElementPosition el
+
   selectEntryFromIndex: (index) ->
     @setActiveEntry @entries.at index
 
-    shouldScroll = false
+    shouldScroll = true
 
-    switch @viewMode
-      when PaperBox.ViewMode.SUMMARY
-        windowHeight = $(window).height()
-        headerHeight = $('#header').height()
+    if @viewMode is PaperBox.ViewMode.SUMMARY
+      position = @getEntryPosition @activeEntry
 
-        scrollTop = $(window).scrollTop()
-        scrollBottom = scrollTop + windowHeight - headerHeight
-
-        el = @getElementForEntry @activeEntry
-        top = $(el).offset().top - headerHeight
-        bottom = top + $(el).height()
-
-        if top < scrollTop or bottom > scrollBottom
-          shouldScroll = true
-
-      when PaperBox.ViewMode.ARTICLES
-        shouldScroll = true
+      shouldScroll = position.top < @scroll.top or
+                     position.bottom > @scroll.bottom
 
     @scrollToActiveEntry() if shouldScroll
 
@@ -289,6 +286,7 @@ class PaperBox.EntriesView extends Backbone.View
       @selectEntryFromIndex index + 1
 
   onWindowScroll: =>
+    @updateScroll()
     @updateActiveEntryFromScroll()
 
   onEntryActivate: (entry) =>
