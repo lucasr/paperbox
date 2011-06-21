@@ -184,7 +184,6 @@ class PaperBox.EntriesView extends Backbone.View
   scrollToActiveEntry: ->
     return if not @activeEntry?
 
-    # Scroll to the activated entry in full view mode
     $(window).scrollTop @getEntryViewScrollTop @activeEntry
 
   createEntryView: (entry) ->
