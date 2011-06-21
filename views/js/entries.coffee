@@ -162,14 +162,14 @@ class PaperBox.EntriesView extends Backbone.View
     # FIXME: This is highly inefficient. We should come up
     # with a better way to update active entry from scroll
 
-    windowTop = $(window).scrollTop()
+    scrollTop = $(window).scrollTop()
     windowHeight = $(window).height()
     headerHeight = $('#header').height()
 
     $(@el).children().each (index, el) =>
       top = $(el).offset().top - headerHeight
 
-      if windowTop <= top <= windowTop + windowHeight
+      if scrollTop <= top <= scrollTop + windowHeight
         @setActiveEntry @entries.at index
         false
 
