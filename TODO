@@ -14,6 +14,7 @@ Views:
 - Implement progress indicator
 - Investigate bootstrapping categories and feeds with an in-page json
   instead of the extra ajax call
+- Load entries incrementally with infinite scrolling
 
 Server:
 - Implement mock auth infra
