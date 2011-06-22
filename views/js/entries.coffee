@@ -227,7 +227,7 @@ class PaperBox.EntriesView extends Backbone.View
     position = {}
 
     position.top = $(el).offset().top - @scroll.headerHeight
-    position.bottom = position.top + $(el).height()
+    position.bottom = position.top + $(el).outerHeight()
 
     position
 
