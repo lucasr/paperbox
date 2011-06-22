@@ -219,8 +219,6 @@ app.get '/api/feed/:feedId/entries', (req, res) ->
     entries = []
     for feed in CATEGORIES[categoryId].feeds
       entries = entries.concat feed.entries
-
-    console.log "#### #{categoryId} entries #{entries.length}"
   else
     entries = FEEDS[req.feed.id].entries
 
