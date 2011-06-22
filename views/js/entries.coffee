@@ -173,10 +173,17 @@ class PaperBox.EntriesView extends Backbone.View
         @setActiveEntry @entries.at index
         false
 
-  scrollToActiveEntry: ->
+  scrollToActiveEntry: (options = {}) ->
     return if not @activeEntry?
 
-    $(window).scrollTop @getEntryPosition(@activeEntry).top
+    position = @getEntryPosition @activeEntry
+
+    if 'toBottom' of options
+      scrollTop = @scroll.top + position.bottom - @scroll.bottom
+    else
+      scrollTop = position.top
+
+    $(window).scrollTop scrollTop
 
   createEntryView: (entry) ->
     view = new PaperBox.EntryView model: entry, viewMode: @viewMode
