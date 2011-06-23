@@ -178,9 +178,17 @@ class PaperBox.EntriesView extends Backbone.View
     bottommost = $(document).height() -
                  @scroll.windowHeight - @scroll.headerHeight
 
-    return if @scroll.top isnt bottommost
+    index = @entries.indexOf @activeEntry
 
-    if @entries.hasMoreEntries()
+    reachedBottom = @scroll.top is bottommost or
+                    index is @entries.size() - 1
+
+    # We should only request more entries if we reached
+    # the bottom of the list either by selecting the last
+    # entry or scrolling to the very bottom of the document.
+    # The entries collection should also have more entries
+    # available to fetch.
+    if reachedBottom and @entries.hasMoreEntries()
       @page++
       @fetchEntries()
 
@@ -303,6 +311,8 @@ class PaperBox.EntriesView extends Backbone.View
       options.toBottom = true if position.bottom > @scroll.bottom
 
     @scrollToActiveEntry(options) if shouldScroll
+
+    @maybeFetchMoreEntries()
 
   setFeed: (feed) ->
     return if feed is @feed
