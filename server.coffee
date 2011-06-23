@@ -43,7 +43,7 @@ for c in [0...N_CATEGORIES]
       entry =
         id: entryId
         title: "Entry #{entryId} (Feed #{feed.id})"
-        date: Date.now() - (86400000 * e)
+        date: Date.now() - (86400000 * entryId) + entryId
         body: ""
         feed: feed.name
 
