@@ -369,7 +369,7 @@ class PaperBox.EntriesView extends Backbone.View
     @setViewMode PaperBox.ViewMode.ARTICLES
 
   onAddEntry: (entry) =>
-    @addEntry(entry)
+    @addEntry entry
 
   onAddManyEntries: (entries) =>
     @addManyEntries entries
