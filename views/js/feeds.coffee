@@ -130,7 +130,12 @@ class PaperBox.FeedsView extends Backbone.View
     return if not @category?
 
     feeds = @category.getFeeds()
-    feed = feeds.detect (f) -> f.id is feedId
+    categoryFeed = feeds.getCategoryFeed()
+
+    if categoryFeed.id is feedId
+      feed = categoryFeed
+    else
+      feed = feeds.detect (f) -> f.id is feedId
 
     @updateSelected feed
 
