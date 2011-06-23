@@ -16,7 +16,8 @@ class PaperBox.AppController extends Backbone.Controller
 
     if feedId?
       feedId = parseInt feedId, 10
-      @appView.selectFeedFromId feedId
+      if not isNaN feedId
+        @appView.selectFeedFromId feedId
 
   setAppView: (appView) ->
     @appView = appView
