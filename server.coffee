@@ -12,6 +12,8 @@ CATEGORIES = {}
 FEEDS = {}
 ENTRIES = {}
 
+ENTRIES_PER_PAGE = 30
+
 ALL_FEEDS_ID_PATTERN = /all-(.+)/
 
 categoryId = feedId = entryId = 1
@@ -179,9 +181,14 @@ handleEntryId = (req, res, next, entryId) ->
 
   next()
 
+handlePageIndex = (req, res, next, pageIndex) ->
+  req.pageIndex = parseInt pageIndex, 10
+  next()
+
 app.param 'categoryId', handleCategoryId
 app.param 'feedId', handleFeedId
 app.param 'entryId', handleEntryId
+app.param 'pageIndex', handlePageIndex
 
 # Categories
 
@@ -211,7 +218,7 @@ app.get '/api/feed/:feedId', (req, res) ->
 app.put '/api/feed/:feedId', (req, res) ->
   FEEDS[req.feed.id].name = req.body.name
 
-app.get '/api/feed/:feedId/entries', (req, res) ->
+app.get '/api/feed/:feedId/entries/:pageIndex', (req, res) ->
   matches = "#{req.feed.id}".match ALL_FEEDS_ID_PATTERN
   if matches?
     categoryId = parseInt matches[1], 10
@@ -222,8 +229,14 @@ app.get '/api/feed/:feedId/entries', (req, res) ->
   else
     entries = FEEDS[req.feed.id].entries
 
-  res.send entries
+  entries.sort (e1, e2) -> e1.date - e2.date
 
+  start = req.pageIndex * ENTRIES_PER_PAGE
+  end = (req.pageIndex + 1) * ENTRIES_PER_PAGE
+
+  entries = entries.slice start, end
+
+  res.send entries
 
 # Entries
 
