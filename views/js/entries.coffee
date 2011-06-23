@@ -232,7 +232,10 @@ class PaperBox.EntriesView extends Backbone.View
     else
       scrollTop = position.top
 
-    $(window).scrollTop scrollTop
+    if 'animate' of options
+      $('html,body').animate scrollTop: scrollTop, 500
+    else
+      $(window).scrollTop scrollTop
 
   createEntryView: (entry) ->
     view = new PaperBox.EntryView model: entry, viewMode: @viewMode
