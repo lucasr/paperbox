@@ -357,6 +357,8 @@ class PaperBox.EntriesView extends Backbone.View
     if @viewMode is PaperBox.ViewMode.SUMMARY and @activeEntry?
       position = @getEntryPosition @activeEntry
 
+      # While in summary mode, we should only update the active
+      # entry if the currently active entry is not visible
       updateActiveFromScroll = position.top > @scroll.bottom or
                                position.bottom < @scroll.top
 
