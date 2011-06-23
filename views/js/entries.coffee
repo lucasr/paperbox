@@ -303,7 +303,7 @@ class PaperBox.EntriesView extends Backbone.View
     @setActiveEntry @entries.at index
 
     shouldScroll = true
-    options = {}
+    options = animate: true
 
     if @viewMode is PaperBox.ViewMode.SUMMARY
       position = @getEntryPosition @activeEntry
