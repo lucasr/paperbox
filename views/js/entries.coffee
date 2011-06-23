@@ -355,7 +355,7 @@ class PaperBox.EntriesView extends Backbone.View
     updateActiveFromScroll = true
 
     if @viewMode is PaperBox.ViewMode.SUMMARY and @activeEntry?
-      position = @getElementForEntry @activeEntry
+      position = @getEntryPosition @activeEntry
 
       updateActiveFromScroll = position.top > @scroll.bottom or
                                position.bottom < @scroll.top
