@@ -160,7 +160,10 @@ class PaperBox.EntriesView extends Backbone.View
     @trackScrollPosition()
 
   trackScrollPosition: ->
-    $(window).scroll @onWindowScroll
+    $(window).bind 'scroll', @onWindowScroll
+
+  untrackScrollPosition: ->
+    $(window).unbind 'scroll', @onWindowScroll
 
   fetchEntries: ->
     return if not @feed?
@@ -233,7 +236,15 @@ class PaperBox.EntriesView extends Backbone.View
       scrollTop = position.top
 
     if 'animate' of options
-      $('html,body').animate scrollTop: scrollTop, 500
+      # Avoid the overhead of running the scroll callback
+      # on each frame of the smooth scrolling animation
+      @untrackScrollPosition()
+
+      $('html,body').stop().animate scrollTop: scrollTop, 500, null, =>
+        # One the animation if over, we start tracking scrolling
+        # events as usual and update the scroll state accordingly
+        @trackScrollPosition()
+        @onWindowScroll()
     else
       $(window).scrollTop scrollTop
 
