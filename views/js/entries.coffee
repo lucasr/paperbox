@@ -16,18 +16,47 @@ class PaperBox.Entries extends Backbone.Collection
   model: PaperBox.Entry
 
   url: ->
-    null if not @feed?
-    "/api/feed/#{@feed.id}/entries"
+    null if not @feed? or not @page?
+    "/api/feed/#{@feed.id}/entries/#{@page}"
+
+  initialize: ->
+    @hasMore = true
 
   comparator: (entry) ->
     entry.get 'date'
 
-  setFeed: (feed) ->
-    return if feed is @feed
+  fetchMore: ->
+    Backbone.sync 'read', @, (resp) =>
+      if resp.length is 0
+        return @hasMore = false
 
+      models = []
+
+      for m in resp
+        models.push new @model m, collection: @
+
+      @add models, silent: true
+      @trigger 'add-many', models
+
+    @
+
+  hasMoreEntries: ->
+    @hasMore
+
+  setFeedAndPage: (feed, page) ->
+    return if feed is @feed and page is @page
+
+    pageChanged = page isnt @page
+    @page = page
+
+    feedChanged = feed isnt @feed
     @feed = feed
 
-    @fetch() if @feed?
+    if feedChanged
+      @hasMore = true
+      @fetch()
+    else
+      @fetchMore()
 
 
 class PaperBox.EntryView extends Backbone.View
@@ -122,6 +151,7 @@ class PaperBox.EntriesView extends Backbone.View
     @activeEntry = null
     @viewMode = null
     @feed = null
+    @page = 0
 
     @scroll =
       headerHeight: $('#header').height()
@@ -139,9 +169,20 @@ class PaperBox.EntriesView extends Backbone.View
       @entries = new PaperBox.Entries
 
       @entries.bind 'add', @onAddEntry
+      @entries.bind 'add-many', @onAddManyEntries
       @entries.bind 'refresh', @onRefreshEntries
 
-    @entries.setFeed @feed
+    @entries.setFeedAndPage @feed, @page
+
+  maybeFetchMoreEntries: ->
+    bottommost = $(document).height() -
+                 @scroll.windowHeight - @scroll.headerHeight
+
+    return if @scroll.top isnt bottommost
+
+    if @entries.hasMoreEntries()
+      @page++
+      @fetchEntries()
 
   getElementForEntry: (entry) ->
     $("[id=entry-#{entry.id}]")
@@ -196,6 +237,18 @@ class PaperBox.EntriesView extends Backbone.View
   addEntry: (entry) =>
     view = @createEntryView entry
     $(@el).append view.render().el
+
+  addManyEntries: (entries) =>
+    docFragment = document.createDocumentFragment()
+
+    # Append each entry to a document
+    # docFragmentment instead of adding each one directly
+    # to the document, for better performance
+    for entry in entries
+      view = @createEntryView entry
+      docFragment.appendChild view.render().el
+
+    $(@el).append docFragment
 
   refreshEntries: =>
     return if not @entries?
@@ -254,6 +307,7 @@ class PaperBox.EntriesView extends Backbone.View
   setFeed: (feed) ->
     return if feed is @feed
 
+    @page = 0
     @feed = feed
 
     # Unset active entry for clarity
@@ -308,12 +362,17 @@ class PaperBox.EntriesView extends Backbone.View
 
     @updateActiveEntryFromScroll() if updateActiveFromScroll
 
+    @maybeFetchMoreEntries()
+
   onEntryActivate: (entry) =>
     @setActiveEntry entry
     @setViewMode PaperBox.ViewMode.ARTICLES
 
   onAddEntry: (entry) =>
     @addEntry(entry)
+
+  onAddManyEntries: (entries) =>
+    @addManyEntries entries
 
   onRefreshEntries: =>
     # In case of a refresh caused by a change in
